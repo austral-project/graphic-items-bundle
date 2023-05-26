@@ -42,30 +42,6 @@ interface ItemInterface
   public function setKeyname(?string $keyname): ItemInterface;
 
   /**
-   * @return bool
-   */
-  public function getIsActive(): bool;
-
-  /**
-   * @param bool $isActive
-   *
-   * @return ItemInterface
-   */
-  public function setIsActive(bool $isActive): ItemInterface;
-
-  /**
-   * @return string|null
-   */
-  public function getSimpleIcon(): ?string;
-
-  /**
-   * @param string|null $simpleIcon
-   *
-   * @return ItemInterface
-   */
-  public function setSimpleIcon(?string $simpleIcon): ItemInterface;
-
-  /**
    * @return string|null
    */
   public function getPicto(): ?string;
