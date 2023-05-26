@@ -39,6 +39,11 @@ class Icon
   protected ?string $path = null;
 
   /**
+   * @var array
+   */
+  protected array $svgPath = array();
+
+  /**
    * create
    *
    * @param string|null $keyname
@@ -152,6 +157,25 @@ class Icon
   public function setPath(?string $path): Icon
   {
     $this->path = $path;
+    return $this;
+  }
+
+  /**
+   * @return array
+   */
+  public function getSvgPath(): array
+  {
+    return $this->svgPath;
+  }
+
+  /**
+   * @param array $svgPath
+   *
+   * @return $this
+   */
+  public function setSvgPath(array $svgPath): Icon
+  {
+    $this->svgPath = $svgPath;
     return $this;
   }
 

@@ -30,10 +30,8 @@ class GraphicItemsController  implements ContainerAwareInterface
     header("Access-Control-Allow-Origin: *");
     header("Austral: Generate");
     header('Access-Control-Expose-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description, Content-Length, Cache-Control');
-
-    $simpleIcon = $this->container->get('austral.graphic_items.simple_icon');
-
-    if($icon = $simpleIcon->getSimpleIcon($keyname))
+    $graphicItemsManagement = $this->container->get('austral.graphic_items.management');
+    if($icon = $graphicItemsManagement->getIcon($keyname))
     {
       $lastModifiedTime = filemtime($icon->getPath());
       $etag = 'W/"' . md5($lastModifiedTime) . '"';

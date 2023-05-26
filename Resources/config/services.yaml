@@ -4,8 +4,16 @@ services:
     autoconfigure: true
     public:        true
 
+  austral.graphic_items.management:
+    class:          Austral\GraphicItemsBundle\Services\GraphicItemManagement
+    arguments:      ["@service_container", "@austral.graphic_items.simple_icon", "@austral.graphic_items.austral_font_icon"]
+
   austral.graphic_items.simple_icon:
     class:          Austral\GraphicItemsBundle\Services\SimpleIcon
+    arguments:      ["@service_container"]
+
+  austral.graphic_items.austral_font_icon:
+    class:          Austral\GraphicItemsBundle\Services\AustralFontIcon
     arguments:      ["@service_container"]
 
 ##### Entities Manager #####
