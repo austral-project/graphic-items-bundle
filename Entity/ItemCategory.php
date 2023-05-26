@@ -9,12 +9,11 @@
  */
 
 namespace Austral\GraphicItemsBundle\Entity;
-use Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface;
+use Austral\GraphicItemsBundle\Entity\Interfaces\ItemCategoryInterface;
 
 use Austral\EntityBundle\Entity\Entity;
 use Austral\EntityBundle\Entity\EntityInterface;
 use Austral\EntityBundle\Entity\Traits\EntityTimestampableTrait;
-use Austral\EntityBundle\Entity\Interfaces\FileInterface;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
@@ -25,7 +24,7 @@ use Ramsey\Uuid\Uuid;
  * @abstract
  * @ORM\MappedSuperclass
  */
-abstract class ItemCategory extends Entity implements ItemInterface, EntityInterface, FileInterface
+abstract class ItemCategory extends Entity implements ItemCategoryInterface, EntityInterface
 {
 
   use EntityTimestampableTrait;

@@ -22,10 +22,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Austral\GraphicItemsBundle\Repository\ItemCategoryRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Item extends BaseItemCategory
+class ItemCategory extends BaseItemCategory
 {
   public function __construct()
   {
-      parent::__construct();
+    parent::__construct();
   }
 }
