@@ -5,3 +5,12 @@ services:
     autowire:       false
     autoconfigure:  false
     public:         true
+
+
+  ##### Listener
+
+  austral.graphic_items.form.listener:
+    class:          Austral\GraphicItemsBundle\Listener\FormListener
+    arguments:
+    tags:
+      - { name: kernel.event_listener, event: "austral.event.form.add_auto_fields_after", method: formAddAutoFields }
