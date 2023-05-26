@@ -1,0 +1,10 @@
+parameters:
+
+##### Entities Class
+  austral.entity.graphic_items.item.class:                                              App\Entity\Austral\GraphicItemsBundle\Item
+  austral.entity.graphic_items.item_category.class:                                     App\Entity\Austral\GraphicItemsBundle\ItemCategory
+
+##### Doctrine Resolve target Entities
+  austral.resolve_target_entities.graphic_items:
+    Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface:                         "%austral.entity.graphic_items.item.class%"
+    Austral\GraphicItemsBundle\Entity\Interfaces\ItemCategoryInterface:                 "%austral.entity.graphic_items.item_category.class%"

@@ -1,0 +1,33 @@
+services:
+  _defaults:
+    autowire:      true
+    autoconfigure: true
+    public:        true
+
+parameters:
+
+  austral.admin.class.graphic_items.class:                                           Austral\GraphicItemsBundle\Admin\GraphicItemsAdmin
+
+  austral.admin.modules.graphic_items_bundle.config.enabled:                         true
+  austral.admin.modules.graphic_items_bundle.config.graphic_items.enabled:          true
+
+  austral_admin.modules.graphic_items_bundle:
+    config_graphic_items:
+      enabled:                    "%austral.admin.modules.graphic_items_bundle.config.enabled%"
+      navigation:
+        position:                 500
+      name:                       "Configuration"
+      picto:                      "austral-picto-cog"
+      route:                      "config"
+      translate:                  "female_c"
+      actions:
+        index:                    "listChildrenModules"
+      children:
+        graphic_items:
+          enabled:                "%austral.admin.modules.graphic_items_bundle.config.graphic_items.enabled%"
+          name:                   "Graphic Items"
+          picto:                  "austral-picto-activity"
+          pictoTile:              "parameters"
+          route:                  "graphic-items"
+          class:                  "%austral.admin.class.graphic_items.class%"
+          translate:              "male_c"

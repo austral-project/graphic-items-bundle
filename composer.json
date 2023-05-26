@@ -1,0 +1,34 @@
+{
+  "name":                                     "austral/graphic-items-bundle",
+  "type":                                     "symfony-bundle",
+  "description":                              "Graphic Items for Austral",
+  "keywords":                                 ["Austral", "Graphic Items", "Simple Icons", "Symfony"],
+  "license":                                  "MIT",
+  "homepage":                                 "https://austral.dev",
+  "authors": [
+    {
+      "name":                                 "Matthieu Beurel",
+      "email":                                "matthieu@austral.dev",
+      "role":                                 "Developer"
+    }
+  ],
+  "require": {
+    "php":                                    "^7.4 || ^8.0",
+
+    "austral/tools-bundle":                   "^3.1",
+    "austral/entity-bundle":                  "^3.1",
+    "austral/entity-file-bundle":             "^3.1",
+    "austral/http-bundle":                    "3.1",
+    "simple-icons/simple-icons":              "8.15.0",
+    "symfony/config":                         "^5.4"
+  },
+  "config": {
+    "sort-packages":                          true
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": { "Austral\\GraphicItemsBundle\\": "" }
+  },
+  "minimum-stability":                        "dev"
+}

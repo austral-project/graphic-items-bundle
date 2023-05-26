@@ -1,0 +1,13 @@
+parameters:
+
+  austral_entity_file.uploads.graphic_items_bundle:
+    graphic_items_picto:
+      size:
+        max: "10M"
+      mimeTypes:
+        - 'image/jpg'
+        - 'image/jpeg'
+        - 'image/png'
+        - 'image/gif'
+        - 'image/svg'
+        - 'image/svg+xml'

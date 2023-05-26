@@ -1,0 +1,20 @@
+services:
+  _defaults:
+    autowire:      true
+    autoconfigure: true
+    public:        true
+
+  austral.graphic_items.simple_icon:
+    class:          Austral\GraphicItemsBundle\Services\SimpleIcon
+    arguments:      ["@service_container"]
+
+##### Entities Manager #####
+
+  ##### Config Entity Manager
+  austral.entity_manager.graphic_items.item:
+    class:          Austral\GraphicItemsBundle\EntityManager\ItemEntityManager
+    arguments:      [ "@doctrine.orm.entity_manager",  "@event_dispatcher", "%austral.entity.graphic_items.item.class%" ]
+
+  austral.entity_manager.graphic_items.item_category:
+    class:          Austral\GraphicItemsBundle\EntityManager\ItemCategoryEntityManager
+    arguments:      [ "@doctrine.orm.entity_manager",  "@event_dispatcher", "%austral.entity.graphic_items.item_category.class%" ]
