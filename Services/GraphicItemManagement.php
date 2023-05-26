@@ -37,6 +37,18 @@ class GraphicItemManagement
   }
 
   /**
+   * getIcons
+   * @return array
+   */
+  public function getIcons(): array
+  {
+    return array(
+      "austral-picto" =>  $this->australFontIcon->getIcons(),
+      "simple-icon"   =>  $this->simpleIcon->getIcons(),
+    );
+  }
+
+  /**
    * getIcon
    *
    * @param string $keyname
