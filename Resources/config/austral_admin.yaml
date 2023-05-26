@@ -6,10 +6,10 @@ services:
 
 parameters:
 
-  austral.admin.class.graphic_items.class:                                           Austral\GraphicItemsBundle\Admin\GraphicItemsAdmin
+  austral.admin.class.graphic_items.item.class:                                     Austral\GraphicItemsBundle\Admin\GraphicItemsAdmin
 
-  austral.admin.modules.graphic_items_bundle.config.enabled:                         true
-  austral.admin.modules.graphic_items_bundle.config.graphic_items.enabled:          true
+  austral.admin.modules.graphic_items_bundle.config.enabled:                        true
+  austral.admin.modules.graphic_items_bundle.config.item.enabled:                   true
 
   austral_admin.modules.graphic_items_bundle:
     config_graphic_items:
@@ -24,10 +24,11 @@ parameters:
         index:                    "listChildrenModules"
       children:
         graphic_items:
-          enabled:                "%austral.admin.modules.graphic_items_bundle.config.graphic_items.enabled%"
+          enabled:                "%austral.admin.modules.graphic_items_bundle.config.item.enabled%"
           name:                   "Graphic Items"
           picto:                  "austral-picto-activity"
           pictoTile:              "parameters"
           route:                  "graphic-items"
-          class:                  "%austral.admin.class.graphic_items.class%"
+          entity_manager:         "austral.entity_manager.graphic_items.item"
+          class:                  "%austral.admin.class.graphic_items.item.class%"
           translate:              "male_c"

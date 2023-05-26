@@ -1,13 +1,11 @@
 pages:
   names:
     configGraphicItems:
-      singular:                                 Socials Network
-      plural:                                   Social Network
+      singular:                                 Graphic Items
+      plural:                                   Graphic Item
 
 fields:
   name:
     entitled:                                   Name
   keyname:
     entitled:                                   Keyname
-  url:
-    entitled:                                   Url

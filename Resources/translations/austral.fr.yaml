@@ -1,13 +1,11 @@
 pages:
   names:
     configGraphicItems:
-      singular:                                 Réseaux sociaux
-      plural:                                   Réseau social
+      singular:                                 Éléments graphiques
+      plural:                                   Élément graphique
 
 fields:
   name:
     entitled:                                   Nom
   keyname:
     entitled:                                   Keyname
-  url:
-    entitled:                                   Url
