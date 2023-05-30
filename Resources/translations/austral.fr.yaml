@@ -1,11 +1,11 @@
 pages:
   names:
     configGraphicItem:
-      singular:                                 Éléments graphiques
-      plural:                                   Élément graphique
+      singular:                                 Élément graphique
+      plural:                                   Éléments graphiques
     configGraphicItemCategory:
-      singular:                                 Catégories d'élément graphique
-      plural:                                   Catégorie d'élément graphique
+      singular:                                 Catégorie d'élément graphique
+      plural:                                   Catégories d'élément graphique
 
 fields:
   name:

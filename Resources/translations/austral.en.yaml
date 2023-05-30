@@ -1,11 +1,11 @@
 pages:
   names:
     configGraphicItem:
-      singular:                                 Graphic Items
-      plural:                                   Graphic Item
+      singular:                                 Graphic Item
+      plural:                                   Graphic Items
     configGraphicItemCategory:
-      singular:                                 Graphic Items Category
-      plural:                                   Graphic Item Category
+      singular:                                 Graphic Item Category
+      plural:                                   Graphic Items Category
 
 fields:
   name:
