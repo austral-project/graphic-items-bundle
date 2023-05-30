@@ -10,6 +10,8 @@
 
 namespace Austral\GraphicItemsBundle\Entity\Interfaces;
 
+use Doctrine\Common\Collections\Collection;
+
 /**
  * Austral ItemCategory Interface.
  * @author Matthieu Beurel <matthieu@austral.dev>
@@ -40,5 +42,28 @@ interface ItemCategoryInterface
    * @return ItemCategoryInterface
    */
   public function setkeyname(?string $keyname): ItemCategoryInterface;
+
+  /**
+   * @return Collection
+   */
+  public function getItems(): Collection;
+
+  /**
+   * @param ItemInterface $item
+   * @return ItemCategoryInterface
+   */
+  public function addItem(ItemInterface $item): ItemCategoryInterface;
+
+  /**
+   * @param ItemInterface $item
+   * @return ItemCategoryInterface
+   */
+  public function removeItem(ItemInterface $item): ItemCategoryInterface;
+
+  /**
+   * @param Collection $items
+   * @return ItemCategoryInterface
+   */
+  public function setItems(Collection $items): ItemCategoryInterface;
 
 }

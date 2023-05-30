@@ -1,11 +1,22 @@
 pages:
   names:
-    configGraphicItems:
+    configGraphicItem:
       singular:                                 Graphic Items
       plural:                                   Graphic Item
+    configGraphicItemCategory:
+      singular:                                 Graphic Items Category
+      plural:                                   Graphic Item Category
 
 fields:
   name:
     entitled:                                   Name
   keyname:
     entitled:                                   Keyname
+
+graphic-item:
+  button:
+    choice:                                     Choice picto
+  type:
+    austral-icon:                               Austral Icon
+    simple-icon:                                Simple Icon
+    local-icon:                                 Custom Icon

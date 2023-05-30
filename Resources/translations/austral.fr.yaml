@@ -3,9 +3,20 @@ pages:
     configGraphicItems:
       singular:                                 Éléments graphiques
       plural:                                   Élément graphique
+    configGraphicItemCategory:
+      singular:                                 Catégories d'élément graphique
+      plural:                                   Catégorie d'élément graphique
 
 fields:
   name:
     entitled:                                   Nom
   keyname:
     entitled:                                   Keyname
+
+graphic-item:
+  button:
+    choice:                                     Choisissez un picto
+  type:
+    austral-icon:                               Austral Icon
+    simple-icon:                                Simple Icon
+    local-icon:                                 Icon personnalisés

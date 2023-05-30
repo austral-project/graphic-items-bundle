@@ -18,6 +18,17 @@ interface ItemInterface
 {
 
   /**
+   * @return ItemCategoryInterface|null
+   */
+  public function getCategory(): ?ItemCategoryInterface;
+
+  /**
+   * @param ItemCategoryInterface|null $itemCategory
+   * @return ItemInterface
+   */
+  public function setCategory(?ItemCategoryInterface $itemCategory): ItemInterface;
+
+  /**
    * @return string|null
    */
   public function getName(): ?string;

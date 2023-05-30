@@ -45,17 +45,23 @@ class SimpleIcon
       foreach ($simpleIcons->icons as $icon)
       {
         $keyname = $this->generateKeyname($icon->title);
-        if(!file_exists("{$this->iconsPath}/{$keyname}.svg"))
+        $filePath = "{$this->iconsPath}/{$keyname}.svg";
+        if(!file_exists($filePath))
         {
           $keyname = $this->generateKeyname($icon->title, true);
+          $filePath = "{$this->iconsPath}/{$keyname}.svg";
         }
-        if(file_exists("{$this->iconsPath}/{$keyname}.svg"))
+        if(file_exists($filePath))
         {
+          $fileContent = file_get_contents($filePath);
+          preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
           $this->icons[$keyname] = Icon::create($keyname)
             ->setTitle($icon->title)
             ->setHexa($icon->hex)
-            ->setPath("{$this->iconsPath}/{$keyname}.svg")
-            ->setSource($icon->source);
+            ->setPath($filePath)
+            ->setIsSVG(true)
+            ->setViewBox(AustralTools::getValueByKey($matches, 1, null))
+            ->setContent($fileContent);
         }
         else
         {

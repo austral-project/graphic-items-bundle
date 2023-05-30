@@ -11,7 +11,6 @@
 namespace Austral\GraphicItemsBundle\Services;
 
 use Austral\GraphicItemsBundle\Model\Icon;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class GraphicItemManagement
 {
@@ -21,19 +20,28 @@ class GraphicItemManagement
    */
   protected SimpleIcon $simpleIcon;
 
+  /**
+   * @var AustralFontIcon
+   */
   protected AustralFontIcon $australFontIcon;
+
+  /**
+   * @var LocalIcon
+   */
+  protected LocalIcon $localIcon;
 
   /**
    * GraphicItemManagement constructor
    *
-   * @param ContainerInterface $container
    * @param SimpleIcon $simpleIcon
    * @param AustralFontIcon $australFontIcon
+   * @param LocalIcon $localIcon
    */
-  public function __construct(ContainerInterface $container, SimpleIcon $simpleIcon, AustralFontIcon $australFontIcon)
+  public function __construct(SimpleIcon $simpleIcon, AustralFontIcon $australFontIcon, LocalIcon $localIcon)
   {
     $this->simpleIcon = $simpleIcon;
     $this->australFontIcon = $australFontIcon;
+    $this->localIcon = $localIcon;
   }
 
   /**
@@ -43,8 +51,9 @@ class GraphicItemManagement
   public function getIcons(): array
   {
     return array(
-      "austral-picto" =>  $this->australFontIcon->getIcons(),
+      "austral-icon"  =>  $this->australFontIcon->getIcons(),
       "simple-icon"   =>  $this->simpleIcon->getIcons(),
+      "local-icon"    =>  $this->localIcon->getIcons(),
     );
   }
 
@@ -58,9 +67,9 @@ class GraphicItemManagement
   public function getIcon(string $keyname): ?Icon
   {
     $icon = null;
-    if(str_contains($keyname, "austral-picto"))
+    if(str_contains($keyname, "austral-icon"))
     {
-      $keyname = str_replace("austral-picto-", "", $keyname);
+      $keyname = str_replace("austral-icon-", "", $keyname);
       /** @var Icon $picto */
       $icon = $this->australFontIcon->getIcon($keyname);
     }
@@ -70,7 +79,37 @@ class GraphicItemManagement
       /** @var Icon $picto */
       $icon = $this->simpleIcon->getIcon($keyname);
     }
+    if(str_contains($keyname, "local-icon"))
+    {
+      $keyname = str_replace("local-icon-", "", $keyname);
+      /** @var Icon $picto */
+      $icon = $this->localIcon->getIcon($keyname);
+    }
     return $icon;
+  }
+
+  /**
+   * spriteSVG
+   * @return SpriteSVG
+   * @throws \DOMException
+   */
+  public function spriteSVG(): SpriteSVG
+  {
+    $sprite = new SpriteSVG();
+    $i = 0;
+    foreach ($this->getIcons() as $type => $iconsByType)
+    {
+      if($type !== "local-icon")
+      {
+        /** @var Icon $icon */
+        foreach ($iconsByType as $icon)
+        {
+          $sprite->addAllStates("{$type}-{$icon->getKeyname()}", $icon->getPath(), $i);
+          $i++;
+        }
+      }
+    }
+    return $sprite;
   }
 
 }

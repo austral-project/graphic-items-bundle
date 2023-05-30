@@ -9,6 +9,7 @@
  */
 
 namespace Austral\GraphicItemsBundle\Entity;
+use Austral\GraphicItemsBundle\Entity\Interfaces\ItemCategoryInterface;
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface;
 
 use Austral\EntityBundle\Entity\Entity;
@@ -39,6 +40,13 @@ abstract class Item extends Entity implements ItemInterface, EntityInterface, Fi
    * @ORM\Id
    */
   protected $id;
+
+  /**
+   * @var ItemCategoryInterface|null
+   * @ORM\ManyToOne(targetEntity="Austral\GraphicItemsBundle\Entity\Interfaces\ItemCategoryInterface", inversedBy="items")
+   * @ORM\JoinColumn(name="item_category_id", referencedColumnName="id", onDelete="SET NULL")
+   */
+  protected ?ItemCategoryInterface $category=null;
 
   /**
    * @var string|null
@@ -92,6 +100,24 @@ abstract class Item extends Entity implements ItemInterface, EntityInterface, Fi
   }
 
   /**
+   * @return ItemCategoryInterface|null
+   */
+  public function getCategory(): ?ItemCategoryInterface
+  {
+    return $this->category;
+  }
+
+  /**
+   * @param ItemCategoryInterface|null $category
+   * @return Item
+   */
+  public function setCategory(?ItemCategoryInterface $category): Item
+  {
+    $this->category = $category;
+    return $this;
+  }
+
+  /**
    * @return string|null
    */
   public function getName(): ?string
@@ -125,7 +151,7 @@ abstract class Item extends Entity implements ItemInterface, EntityInterface, Fi
    */
   public function setKeyname(?string $keyname): ItemInterface
   {
-    $this->keyname = $keyname;
+    $this->keyname = $this->keynameGenerator($keyname);
     return $this;
   }
 

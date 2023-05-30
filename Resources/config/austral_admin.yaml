@@ -6,10 +6,12 @@ services:
 
 parameters:
 
-  austral.admin.class.graphic_items.item.class:                                     Austral\GraphicItemsBundle\Admin\GraphicItemsAdmin
+  austral.admin.class.graphic_items.item.class:                                     Austral\GraphicItemsBundle\Admin\ItemAdmin
+  austral.admin.class.graphic_items.item_category.class:                            Austral\GraphicItemsBundle\Admin\ItemCategoryAdmin
 
   austral.admin.modules.graphic_items_bundle.config.enabled:                        true
   austral.admin.modules.graphic_items_bundle.config.item.enabled:                   true
+  austral.admin.modules.graphic_items_bundle.config.item_category.enabled:          true
 
   austral_admin.modules.graphic_items_bundle:
     config_graphic_items:
@@ -23,12 +25,22 @@ parameters:
       actions:
         index:                    "listChildrenModules"
       children:
-        graphic_items:
+        item_category:
+          enabled:                "%austral.admin.modules.graphic_items_bundle.config.item_category.enabled%"
+          name:                   "Graphic Items Category"
+          picto:                  "austral-picto-activity"
+          pictoTile:              "parameters"
+          route:                  "graphic-item-category"
+          entity_manager:         "austral.entity_manager.graphic_items.item_category"
+          class:                  "%austral.admin.class.graphic_items.item_category.class%"
+          translate:              "male_c"
+          sortable:               true
+        item:
           enabled:                "%austral.admin.modules.graphic_items_bundle.config.item.enabled%"
           name:                   "Graphic Items"
           picto:                  "austral-picto-activity"
           pictoTile:              "parameters"
-          route:                  "graphic-items"
+          route:                  "graphic-item"
           entity_manager:         "austral.entity_manager.graphic_items.item"
           class:                  "%austral.admin.class.graphic_items.item.class%"
           translate:              "male_c"

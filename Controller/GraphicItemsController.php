@@ -47,18 +47,27 @@ class GraphicItemsController  implements ContainerAwareInterface
         header('HTTP/2 304 Not Modified');
         exit();
       }
-      $response = new Response(file_get_contents($icon->getPath()));
-      $finfo = finfo_open(FILEINFO_MIME_TYPE);
-      $mineType = finfo_file($finfo, $icon->getPath());
-      if(strpos($mineType, "svg+xml") === false)
-      {
-        $mineType = str_replace("svg", "svg+xml", $mineType);
-      }
-      $response->headers->set('Content-Type', $mineType);
+      $contentFile = file_get_contents($icon->getPath());
+      $response = new Response($contentFile);
+      $response->headers->set('Content-Type', "image/svg+xml");
       $response->headers->set('Content-Length', filesize($icon->getPath()));
       return $response;
     }
-    return new NotFoundHttpException("Icon not found");
+    throw new NotFoundHttpException("Icon not found");
+  }
+
+  public function icons(Request $request)
+  {
+    header("Access-Control-Allow-Origin: *");
+    header("Austral: Generate");
+    header('Access-Control-Expose-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description, Content-Length, Cache-Control');
+    $graphicItemsManagement = $this->container->get('austral.graphic_items.management');
+    $spriteSVG = $graphicItemsManagement->spriteSVG();
+
+    $response = new Response($spriteSVG->output());
+    $response->headers->set('Content-Type', "image/svg+xml");
+    //$response->headers->set('Content-Length', filesize($icon->getPath()));
+    return $response;
   }
 
 }

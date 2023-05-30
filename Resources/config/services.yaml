@@ -6,7 +6,7 @@ services:
 
   austral.graphic_items.management:
     class:          Austral\GraphicItemsBundle\Services\GraphicItemManagement
-    arguments:      ["@service_container", "@austral.graphic_items.simple_icon", "@austral.graphic_items.austral_font_icon"]
+    arguments:      ["@austral.graphic_items.simple_icon", "@austral.graphic_items.austral_font_icon", "@austral.graphic_items.local_icon"]
 
   austral.graphic_items.simple_icon:
     class:          Austral\GraphicItemsBundle\Services\SimpleIcon
@@ -15,6 +15,18 @@ services:
   austral.graphic_items.austral_font_icon:
     class:          Austral\GraphicItemsBundle\Services\AustralFontIcon
     arguments:      ["@service_container"]
+
+  austral.graphic_items.local_icon:
+    class:          Austral\GraphicItemsBundle\Services\LocalIcon
+    arguments:      ["@service_container"]
+
+
+##### Twig Extension detected
+  twig.extension.graphic_items:
+    class:        Austral\GraphicItemsBundle\TwigExtension\GraphicItemTwig
+    arguments:    ['@austral.graphic_items.management', "@router"]
+    tags:
+      - { name: twig.extension }
 
 ##### Entities Manager #####
 

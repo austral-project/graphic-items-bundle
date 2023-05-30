@@ -24,10 +24,10 @@ use Austral\ListBundle\Column as Column;
 use Exception;
 
 /**
- * GraphicItems Admin.
+ * ItemCategory Admin.
  * @author Matthieu Beurel <matthieu@austral.dev>
  */
-class GraphicItemsAdmin extends Admin implements AdminModuleInterface
+class ItemCategoryAdmin extends Admin implements AdminModuleInterface
 {
 
   /**

@@ -44,12 +44,18 @@ class AustralFontIcon
       foreach ($fontIcons->icons as $icon)
       {
         $keyname = $icon->properties->name;
-        if(file_exists("{$this->iconsPath}/{$keyname}.svg"))
+        $filePath = "{$this->iconsPath}/{$keyname}.svg";
+        if(file_exists($filePath))
         {
+          $fileContent = file_get_contents($filePath);
+          preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
           $this->icons[$keyname] = Icon::create($keyname)
             ->setTitle($icon->properties->name)
-            ->setPath("{$this->iconsPath}/{$keyname}.svg")
-            ->setSvgPath($icon->icon->paths);
+            ->setPath($filePath)
+            ->setSvgPath($icon->icon->paths)
+            ->setIsSVG(true)
+            ->setViewBox(AustralTools::getValueByKey($matches, 1, null))
+            ->setContent($fileContent);
         }
         else
         {

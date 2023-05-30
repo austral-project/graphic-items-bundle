@@ -15,8 +15,12 @@ use Austral\EntityBundle\Entity\Entity;
 use Austral\EntityBundle\Entity\EntityInterface;
 use Austral\EntityBundle\Entity\Traits\EntityTimestampableTrait;
 
+use Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * App ItemCategory Entity.
@@ -37,6 +41,12 @@ abstract class ItemCategory extends Entity implements ItemCategoryInterface, Ent
   protected $id;
 
   /**
+   * @var Collection
+   * @ORM\OneToMany(targetEntity="Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface", mappedBy="category", cascade={"persist", "remove"})
+   */
+  protected Collection $items;
+
+  /**
    * @var string|null
    * @ORM\Column(name="name", type="string", length=255, nullable=true )
    */
@@ -49,6 +59,13 @@ abstract class ItemCategory extends Entity implements ItemCategoryInterface, Ent
   protected ?string $keyname = null;
 
   /**
+   * @var int|null
+   * @Gedmo\SortablePosition
+   * @ORM\Column(name="position", type="integer", nullable=false )
+   */
+  protected ?int $position;
+
+  /**
    * GraphicItems constructor
    * @throws \Exception
    */
@@ -56,6 +73,58 @@ abstract class ItemCategory extends Entity implements ItemCategoryInterface, Ent
   {
     parent::__construct();
     $this->id = Uuid::uuid4()->toString();
+    $this->items = new ArrayCollection();
+  }
+
+  public function __toString()
+  {
+    return $this->name;
+  }
+
+  /**
+   * @return Collection
+   */
+  public function getItems(): Collection
+  {
+    return $this->items;
+  }
+
+  /**
+   * @param ItemInterface $item
+   * @return ItemCategoryInterface
+   */
+  public function addItem(ItemInterface $item): ItemCategoryInterface
+  {
+    if(!$this->items->contains($item))
+    {
+      $item->setCategory($this);
+      $this->items->add($item);
+    }
+    return $this;
+  }
+
+  /**
+   * @param ItemInterface $item
+   * @return ItemCategoryInterface
+   */
+  public function removeItem(ItemInterface $item): ItemCategoryInterface
+  {
+    if($this->items->contains($item))
+    {
+      $item->setCategory(null);
+      $this->items->removeElement($item);
+    }
+    return $this;
+  }
+
+  /**
+   * @param Collection $items
+   * @return ItemCategoryInterface
+   */
+  public function setItems(Collection $items): ItemCategoryInterface
+  {
+    $this->items = $items;
+    return $this;
   }
 
   /**
@@ -71,7 +140,7 @@ abstract class ItemCategory extends Entity implements ItemCategoryInterface, Ent
    *
    * @return $this
    */
-  public function setName(?string $name): ItemCategory
+  public function setName(?string $name): ItemCategoryInterface
   {
     $this->name = $name;
     return $this;
@@ -90,9 +159,31 @@ abstract class ItemCategory extends Entity implements ItemCategoryInterface, Ent
    *
    * @return $this
    */
-  public function setKeyname(?string $keyname): ItemCategory
+  public function setKeyname(?string $keyname): ItemCategoryInterface
   {
-    $this->keyname = $keyname;
+    $this->keyname = $this->keynameGenerator($keyname);
+    return $this;
+  }
+
+  /**
+   * Get position
+   * @return int|null
+   */
+  public function getPosition(): ?int
+  {
+    return $this->position;
+  }
+
+  /**
+   * Set position
+   *
+   * @param int|null $position
+   *
+   * @return ItemCategoryInterface
+   */
+  public function setPosition(?int $position): ItemCategoryInterface
+  {
+    $this->position = $position;
     return $this;
   }
 

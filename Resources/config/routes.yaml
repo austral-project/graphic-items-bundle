@@ -1,4 +1,7 @@
-##### Translation
 austral_graphic_items_icon:
   path: /graphic-items/icons/{keyname}.svg
   controller: Austral\GraphicItemsBundle\Controller\GraphicItemsController::icon
+
+austral_graphic_items_icons:
+  path: /graphic-items/icons.svg
+  controller: Austral\GraphicItemsBundle\Controller\GraphicItemsController::icons

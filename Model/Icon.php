@@ -31,12 +31,22 @@ class Icon
   /**
    * @var string|null
    */
-  protected ?string $source = null;
+  protected ?string $content = null;
 
   /**
    * @var string|null
    */
   protected ?string $path = null;
+  
+  /**
+   * @var boolean
+   */
+  protected bool $isSVG = false;
+
+  /**
+   * @var string
+   */
+  protected string $viewBox = "";
 
   /**
    * @var array
@@ -125,19 +135,18 @@ class Icon
   /**
    * @return string|null
    */
-  public function getSource(): ?string
+  public function getContent(): ?string
   {
-    return $this->source;
+    return $this->content;
   }
 
   /**
-   * @param string|null $source
-   *
-   * @return $this
+   * @param string|null $content
+   * @return Icon
    */
-  public function setSource(?string $source): Icon
+  public function setContent(?string $content): Icon
   {
-    $this->source = $source;
+    $this->content = $content;
     return $this;
   }
 
@@ -157,6 +166,42 @@ class Icon
   public function setPath(?string $path): Icon
   {
     $this->path = $path;
+    return $this;
+  }
+
+  /**
+   * @return bool
+   */
+  public function getIsSVG(): bool
+  {
+    return $this->isSVG;
+  }
+
+  /**
+   * @param bool $isSVG
+   * @return Icon
+   */
+  public function setIsSVG(bool $isSVG): Icon
+  {
+    $this->isSVG = $isSVG;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getViewBox(): string
+  {
+    return $this->viewBox;
+  }
+
+  /**
+   * @param string $viewBox
+   * @return Icon
+   */
+  public function setViewBox(string $viewBox): Icon
+  {
+    $this->viewBox = $viewBox;
     return $this;
   }
 

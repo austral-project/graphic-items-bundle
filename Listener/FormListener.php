@@ -37,21 +37,17 @@ class FormListener
       {
         $options = $field->getOptions();
         $options["attr"]["autocomplete"] = "off";
-        $options["attr"]["data-popin-update-input"] = "field-{$field->getFieldname()}";
+        $options["attr"]["data-popin-update-input"] = "field-graphic-element-{$field->getFieldname()}";
         $field->setPopinId("popup-graphic-items-{$field->getFieldname()}")
           ->setOptions($options);
         $formEvent->getFormMapper()->addPopin("popup-graphic-items-{$field->getFieldname()}", $field->getFieldname(), array(
           "button"  =>  array(
-            "entitled"      =>  "",
-            "picto"         =>  "austral-picto-link",
+            "entitled"      =>  "graphic-item.button.choice",
+            "picto"         =>  "austral-picto-cog",
             "class"         =>  "button-picto",
-            "data"          =>  array(
-              "data-check-value"  =>  json_encode(array(
-                "*[data-popin-update-input='{field-{$field->getFieldname()}}']"
-              ))
-            )
           ),
           "popin"  =>  array(
+            "id"            =>  "master",
             "template"      =>  "graphicItems",
           )
         ));
