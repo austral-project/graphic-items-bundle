@@ -10,11 +10,11 @@
 
 namespace Austral\GraphicItemsBundle\Services;
 
-use Austral\GraphicItemsBundle\Model\Icon;
+use Austral\GraphicItemsBundle\Model\Picto;
 use Austral\ToolsBundle\AustralTools;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class AustralFontIcon
+class AustralPicto
 {
 
   /**
@@ -28,28 +28,29 @@ class AustralFontIcon
   protected array $icons = array();
 
   /**
-   * SimpleIcon constructor
+   * SimplePicto constructor
    *
    * @param ContainerInterface $container
    */
   public function __construct(ContainerInterface $container)
   {
-    $australFontsIconsPath = "{$container->getParameter("kernel.project_dir")}/vendor/austral/design-bundle";
-    $AustralFontIconsDataPath = "{$australFontsIconsPath}/Resources/assets/styles/fonts/austral-picto/selection.json";
-    $this->iconsPath = "{$australFontsIconsPath}/Resources/public/austral-picto";
+    $australFontsPictosPath = "{$container->getParameter("kernel.project_dir")}/vendor/austral/design-bundle";
+    $AustralFontPictosDataPath = "{$australFontsPictosPath}/Resources/assets/styles/fonts/austral-picto/selection.json";
+    $this->iconsPath = "{$australFontsPictosPath}/Resources/public/austral-picto";
 
-    if(file_exists($AustralFontIconsDataPath))
+    if(file_exists($AustralFontPictosDataPath))
     {
-      $fontIcons = json_decode(file_get_contents($AustralFontIconsDataPath));
-      foreach ($fontIcons->icons as $icon)
+      $fontPictos = json_decode(file_get_contents($AustralFontPictosDataPath));
+      foreach ($fontPictos->icons as $icon)
       {
         $keyname = $icon->properties->name;
         $filePath = "{$this->iconsPath}/{$keyname}.svg";
         if(file_exists($filePath))
         {
+          $keyname = "austral-picto-{$keyname}";
           $fileContent = file_get_contents($filePath);
           preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
-          $this->icons[$keyname] = Icon::create($keyname)
+          $this->icons[$keyname] = Picto::create($keyname)
             ->setTitle($icon->properties->name)
             ->setPath($filePath)
             ->setSvgPath($icon->icon->paths)
@@ -66,24 +67,24 @@ class AustralFontIcon
   }
 
   /**
-   * getSimpleIcons
+   * getSimplePictos
    * @return array
    */
-  public function getIcons(): array
+  public function getPictos(): array
   {
     return $this->icons;
   }
 
   /**
-   * getSimpleIcon
+   * getSimplePicto
    *
    * @param string $keyname
    *
-   * @return Icon|null
+   * @return Picto|null
    */
-  public function getIcon(string $keyname): ?Icon
+  public function getPicto(string $keyname): ?Picto
   {
-    return AustralTools::getValueByKey($this->getIcons(), $keyname, null);
+    return AustralTools::getValueByKey($this->getPictos(), $keyname, null);
   }
 
 

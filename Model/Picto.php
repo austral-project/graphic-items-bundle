@@ -10,7 +10,7 @@
 
 namespace Austral\GraphicItemsBundle\Model;
 
-class Icon
+class Picto
 {
   
   /**
@@ -58,9 +58,9 @@ class Icon
    *
    * @param string|null $keyname
    *
-   * @return Icon
+   * @return Picto
    */
-  public static function create(string $keyname = null): Icon
+  public static function create(string $keyname = null): Picto
   {
     return (new self($keyname));
   }
@@ -88,7 +88,7 @@ class Icon
    *
    * @return $this
    */
-  public function setKeyname(?string $keyname): Icon
+  public function setKeyname(?string $keyname): Picto
   {
     $this->keyname = $keyname;
     return $this;
@@ -107,7 +107,7 @@ class Icon
    *
    * @return $this
    */
-  public function setTitle(?string $title): Icon
+  public function setTitle(?string $title): Picto
   {
     $this->title = $title;
     return $this;
@@ -126,7 +126,7 @@ class Icon
    *
    * @return $this
    */
-  public function setHexa(?string $hexa): Icon
+  public function setHexa(?string $hexa): Picto
   {
     $this->hexa = $hexa;
     return $this;
@@ -142,9 +142,10 @@ class Icon
 
   /**
    * @param string|null $content
-   * @return Icon
+   *
+   * @return Picto
    */
-  public function setContent(?string $content): Icon
+  public function setContent(?string $content): Picto
   {
     $this->content = $content;
     return $this;
@@ -163,7 +164,7 @@ class Icon
    *
    * @return $this
    */
-  public function setPath(?string $path): Icon
+  public function setPath(?string $path): Picto
   {
     $this->path = $path;
     return $this;
@@ -179,9 +180,10 @@ class Icon
 
   /**
    * @param bool $isSVG
-   * @return Icon
+   *
+   * @return Picto
    */
-  public function setIsSVG(bool $isSVG): Icon
+  public function setIsSVG(bool $isSVG): Picto
   {
     $this->isSVG = $isSVG;
     return $this;
@@ -197,9 +199,10 @@ class Icon
 
   /**
    * @param string $viewBox
-   * @return Icon
+   *
+   * @return Picto
    */
-  public function setViewBox(string $viewBox): Icon
+  public function setViewBox(string $viewBox): Picto
   {
     $this->viewBox = $viewBox;
     return $this;
@@ -218,7 +221,7 @@ class Icon
    *
    * @return $this
    */
-  public function setSvgPath(array $svgPath): Icon
+  public function setSvgPath(array $svgPath): Picto
   {
     $this->svgPath = $svgPath;
     return $this;

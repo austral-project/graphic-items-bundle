@@ -17,6 +17,10 @@ graphic-item:
   button:
     choice:                                     Choice picto
   type:
-    austral-icon:                               Austral Icon
-    simple-icon:                                Simple Icon
-    local-icon:                                 Custom Icon
+    austral-picto:                               Austral
+    simple-icon:                                 Simple Icon
+    custom-picto:                                Custom
+  select:
+    type:                                       Select category
+  delete:
+    picto:                                      Delete picto

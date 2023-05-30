@@ -10,7 +10,7 @@
 
 namespace Austral\GraphicItemsBundle\Services;
 
-use Austral\GraphicItemsBundle\Model\Icon;
+use Austral\GraphicItemsBundle\Model\Picto;
 use Austral\ToolsBundle\AustralTools;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use function Symfony\Component\String\u;
@@ -26,7 +26,7 @@ class SimpleIcon
   /**
    * @var array
    */
-  protected array $icons = array();
+  protected array $pictos = array();
 
   /**
    * SimpleIcon constructor
@@ -55,7 +55,8 @@ class SimpleIcon
         {
           $fileContent = file_get_contents($filePath);
           preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
-          $this->icons[$keyname] = Icon::create($keyname)
+          $keyname = "simple-icon-{$keyname}";
+          $this->pictos[$keyname] = Picto::create($keyname)
             ->setTitle($icon->title)
             ->setHexa($icon->hex)
             ->setPath($filePath)
@@ -95,24 +96,24 @@ class SimpleIcon
   }
 
   /**
-   * getSimpleIcons
+   * getIcons
    * @return array
    */
-  public function getIcons(): array
+  public function getPictos(): array
   {
-    return $this->icons;
+    return $this->pictos;
   }
 
   /**
-   * getSimpleIcon
+   * getPicto
    *
    * @param string $keyname
    *
-   * @return Icon|null
+   * @return Picto|null
    */
-  public function getIcon(string $keyname): ?Icon
+  public function getPicto(string $keyname): ?Picto
   {
-    return AustralTools::getValueByKey($this->getIcons(), $keyname, null);
+    return AustralTools::getValueByKey($this->getPictos(), $keyname, null);
   }
 
 

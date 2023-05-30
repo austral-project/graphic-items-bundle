@@ -13,11 +13,11 @@ namespace Austral\GraphicItemsBundle\Services;
 use Austral\EntityFileBundle\File\Mapping\FieldFileMapping;
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemCategoryInterface;
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface;
-use Austral\GraphicItemsBundle\Model\Icon;
+use Austral\GraphicItemsBundle\Model\Picto;
 use Austral\ToolsBundle\AustralTools;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LocalIcon
+class CustomPicto
 {
 
   /**
@@ -31,9 +31,16 @@ class LocalIcon
   protected array $icons = array();
 
   /**
-   * SimpleIcon constructor
+   * @var array
+   */
+  protected array $iconsByCateg = array();
+
+  /**
+   * SimplePicto constructor
    *
    * @param ContainerInterface $container
+   *
+   * @throws \Exception
    */
   public function __construct(ContainerInterface $container)
   {
@@ -45,6 +52,10 @@ class LocalIcon
     /** @var ItemCategoryInterface $category */
     foreach ($pictoObjects as $category)
     {
+      $this->iconsByCateg[$category->getId()] = array(
+        "name"    =>  $category->getName(),
+        "pictos"  =>  array()
+      );
       /** @var ItemInterface $item */
       foreach ($category->getItems() as $item)
       {
@@ -54,11 +65,14 @@ class LocalIcon
           $filePath = $fieldFileMapping->getObjectFilePath($item);
           if($filePath)
           {
-            $this->icons[$keyname] = Icon::create($keyname)
+            $keyname = "custom-picto-{$keyname}";
+            $icon = Picto::create($keyname)
               ->setTitle($item->getName())
               ->setPath($filePath)
               ->setIsSVG($this->isSVG($filePath))
               ->setContent($this->getContentFilePath($filePath));
+            $this->icons[$keyname] = $icon;
+            $this->iconsByCateg[$category->getId()]["pictos"][$keyname] = $icon;
           }
         }
       }
@@ -92,24 +106,33 @@ class LocalIcon
   }
 
   /**
-   * getSimpleIcons
+   * getPictos
    * @return array
    */
-  public function getIcons(): array
+  public function getPictos(): array
   {
     return $this->icons;
   }
 
   /**
-   * getSimpleIcon
+   * getPictos
+   * @return array
+   */
+  public function getPictosByCateg(): array
+  {
+    return $this->iconsByCateg;
+  }
+
+  /**
+   * getPicto
    *
    * @param string $keyname
    *
-   * @return Icon|null
+   * @return Picto|null
    */
-  public function getIcon(string $keyname): ?Icon
+  public function getPicto(string $keyname): ?Picto
   {
-    return AustralTools::getValueByKey($this->getIcons(), $keyname, null);
+    return AustralTools::getValueByKey($this->getPictos(), $keyname, null);
   }
 
 

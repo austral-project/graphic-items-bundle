@@ -74,9 +74,9 @@ class GraphicItemTwig extends AbstractExtension
    */
   public function render(?string $keyname): string
   {
-    if($keyname && ($icon = $this->graphicItemManagement->getIcon($keyname)))
+    if($keyname && ($icon = $this->graphicItemManagement->getPicto($keyname)))
     {
-      if(str_contains($keyname, "local-icon"))
+      if(str_contains($keyname, "custom-picto"))
       {
         return "<img src=\"{$this->urlGenerator->generate("austral_graphic_items_icon", array("keyname"=>$keyname))}\" alt=\"\" >";
       }

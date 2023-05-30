@@ -10,7 +10,7 @@
 
 namespace Austral\GraphicItemsBundle\Services;
 
-use Austral\GraphicItemsBundle\Model\Icon;
+use Austral\GraphicItemsBundle\Model\Picto;
 
 class GraphicItemManagement
 {
@@ -21,69 +21,88 @@ class GraphicItemManagement
   protected SimpleIcon $simpleIcon;
 
   /**
-   * @var AustralFontIcon
+   * @var AustralPicto
    */
-  protected AustralFontIcon $australFontIcon;
+  protected AustralPicto $australPicto;
 
   /**
-   * @var LocalIcon
+   * @var CustomPicto
    */
-  protected LocalIcon $localIcon;
+  protected CustomPicto $customPicto;
 
   /**
    * GraphicItemManagement constructor
    *
    * @param SimpleIcon $simpleIcon
-   * @param AustralFontIcon $australFontIcon
-   * @param LocalIcon $localIcon
+   * @param AustralPicto $australPicto
+   * @param CustomPicto $customPicto
    */
-  public function __construct(SimpleIcon $simpleIcon, AustralFontIcon $australFontIcon, LocalIcon $localIcon)
+  public function __construct(SimpleIcon $simpleIcon, AustralPicto $australPicto, CustomPicto $customPicto)
   {
     $this->simpleIcon = $simpleIcon;
-    $this->australFontIcon = $australFontIcon;
-    $this->localIcon = $localIcon;
+    $this->australPicto = $australPicto;
+    $this->customPicto = $customPicto;
   }
 
   /**
-   * getIcons
+   * getPictos
+   *
+   * @param bool $withCateg
+   *
    * @return array
    */
-  public function getIcons(): array
+  public function getPictos(bool $withCateg = false): array
   {
-    return array(
-      "austral-icon"  =>  $this->australFontIcon->getIcons(),
-      "simple-icon"   =>  $this->simpleIcon->getIcons(),
-      "local-icon"    =>  $this->localIcon->getIcons(),
-    );
+    if($withCateg)
+    {
+      $pictos = array(
+        "austral-picto"   =>  array(
+          "pictos"  =>  $this->australPicto->getPictos()
+        ),
+        "simple-icon"     =>  array(
+          "pictos"  =>  $this->simpleIcon->getPictos()
+        ),
+      );
+      foreach ($this->customPicto->getPictosByCateg() as $categId => $values)
+      {
+        $pictos[$categId] = $values;
+      }
+    }
+    else
+    {
+      $pictos = array(
+        "austral-picto"   =>  $this->australPicto->getPictos(),
+        "simple-icon"     =>  $this->simpleIcon->getPictos(),
+        "custom-picto"    =>  $this->customPicto->getPictos(false)
+      );
+    }
+    return $pictos;
   }
 
   /**
-   * getIcon
+   * getPicto
    *
    * @param string $keyname
    *
-   * @return Icon|null
+   * @return Picto|null
    */
-  public function getIcon(string $keyname): ?Icon
+  public function getPicto(string $keyname): ?Picto
   {
     $icon = null;
-    if(str_contains($keyname, "austral-icon"))
+    if(str_contains($keyname, "austral-picto"))
     {
-      $keyname = str_replace("austral-icon-", "", $keyname);
-      /** @var Icon $picto */
-      $icon = $this->australFontIcon->getIcon($keyname);
+      /** @var Picto $picto */
+      $icon = $this->australPicto->getPicto($keyname);
     }
-    if(str_contains($keyname, "simple-icon"))
+    elseif(str_contains($keyname, "simple-icon"))
     {
-      $keyname = str_replace("simple-icon-", "", $keyname);
-      /** @var Icon $picto */
-      $icon = $this->simpleIcon->getIcon($keyname);
+      /** @var Picto $picto */
+      $icon = $this->simpleIcon->getPicto($keyname);
     }
-    if(str_contains($keyname, "local-icon"))
+    elseif(str_contains($keyname, "custom-picto"))
     {
-      $keyname = str_replace("local-icon-", "", $keyname);
-      /** @var Icon $picto */
-      $icon = $this->localIcon->getIcon($keyname);
+      /** @var Picto $picto */
+      $icon = $this->customPicto->getPicto($keyname);
     }
     return $icon;
   }
@@ -97,14 +116,14 @@ class GraphicItemManagement
   {
     $sprite = new SpriteSVG();
     $i = 0;
-    foreach ($this->getIcons() as $type => $iconsByType)
+    foreach ($this->getPictos() as $type => $iconsByType)
     {
-      if($type !== "local-icon")
+      if($type !== "custom-picto")
       {
-        /** @var Icon $icon */
+        /** @var Picto $icon */
         foreach ($iconsByType as $icon)
         {
-          $sprite->addAllStates("{$type}-{$icon->getKeyname()}", $icon->getPath(), $i);
+          $sprite->addAllStates("{$icon->getKeyname()}", $icon->getPath(), $i);
           $i++;
         }
       }

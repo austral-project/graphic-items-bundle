@@ -6,18 +6,18 @@ services:
 
   austral.graphic_items.management:
     class:          Austral\GraphicItemsBundle\Services\GraphicItemManagement
-    arguments:      ["@austral.graphic_items.simple_icon", "@austral.graphic_items.austral_font_icon", "@austral.graphic_items.local_icon"]
+    arguments:      ["@austral.graphic_items.simple_icon", "@austral.graphic_items.austral_picto", "@austral.graphic_items.custom_picto"]
 
   austral.graphic_items.simple_icon:
     class:          Austral\GraphicItemsBundle\Services\SimpleIcon
     arguments:      ["@service_container"]
 
-  austral.graphic_items.austral_font_icon:
-    class:          Austral\GraphicItemsBundle\Services\AustralFontIcon
+  austral.graphic_items.austral_picto:
+    class:          Austral\GraphicItemsBundle\Services\AustralPicto
     arguments:      ["@service_container"]
 
-  austral.graphic_items.local_icon:
-    class:          Austral\GraphicItemsBundle\Services\LocalIcon
+  austral.graphic_items.custom_picto:
+    class:          Austral\GraphicItemsBundle\Services\CustomPicto
     arguments:      ["@service_container"]
 
 
