@@ -15,7 +15,7 @@ fields:
 
 graphic-item:
   button:
-    choice:                                     Choisissez un picto
+    choice:                                     Sélectionner un picto
   type:
     austral-picto:                              Austral
     simple-icon:                                Simple Icon

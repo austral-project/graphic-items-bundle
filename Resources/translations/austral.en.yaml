@@ -15,11 +15,11 @@ fields:
 
 graphic-item:
   button:
-    choice:                                     Choice picto
+    choice:                                     Select picto
   type:
-    austral-picto:                               Austral
-    simple-icon:                                 Simple Icon
-    custom-picto:                                Custom
+    austral-picto:                              Austral
+    simple-icon:                                Simple Icon
+    custom-picto:                               Custom
   select:
     type:                                       Select category
   delete:
