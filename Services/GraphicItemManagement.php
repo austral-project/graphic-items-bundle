@@ -45,6 +45,19 @@ class GraphicItemManagement
   }
 
   /**
+   * init
+   * @return $this
+   * @throws \Exception
+   */
+  public function init(): GraphicItemManagement
+  {
+    $this->simpleIcon->init();
+    $this->australPicto->init();
+    $this->customPicto->init();
+    return $this;
+  }
+
+  /**
    * getPictos
    *
    * @param bool $withCateg
@@ -58,13 +71,13 @@ class GraphicItemManagement
     {
       $pictos = array(
         "austral-picto"   =>  array(
-          "pictos"  =>  $this->australPicto->init()->getPictos()
+          "pictos"  =>  $this->australPicto->getPictos()
         ),
         "simple-icon"     =>  array(
-          "pictos"  =>  $this->simpleIcon->init()->getPictos()
+          "pictos"  =>  $this->simpleIcon->getPictos()
         ),
       );
-      foreach ($this->customPicto->init()->getPictosByCateg() as $categId => $values)
+      foreach ($this->customPicto->getPictosByCateg() as $categId => $values)
       {
         $pictos[$categId] = $values;
       }
@@ -72,9 +85,9 @@ class GraphicItemManagement
     else
     {
       $pictos = array(
-        "austral-picto"   =>  $this->australPicto->init()->getPictos(),
-        "simple-icon"     =>  $this->simpleIcon->init()->getPictos(),
-        "custom-picto"    =>  $this->customPicto->init()->getPictos(false)
+        "austral-picto"   =>  $this->australPicto->getPictos(),
+        "simple-icon"     =>  $this->simpleIcon->getPictos(),
+        "custom-picto"    =>  $this->customPicto->getPictos()
       );
     }
     return $pictos;
@@ -94,17 +107,17 @@ class GraphicItemManagement
     if(str_contains($keyname, "austral-picto"))
     {
       /** @var Picto $picto */
-      $icon = $this->australPicto->init()->getPicto($keyname);
+      $icon = $this->australPicto->getPicto($keyname);
     }
     elseif(str_contains($keyname, "simple-icon"))
     {
       /** @var Picto $picto */
-      $icon = $this->simpleIcon->init()->getPicto($keyname);
+      $icon = $this->simpleIcon->getPicto($keyname);
     }
     elseif(str_contains($keyname, "custom-picto"))
     {
       /** @var Picto $picto */
-      $icon = $this->customPicto->init()->getPicto($keyname);
+      $icon = $this->customPicto->getPicto($keyname);
     }
     return $icon;
   }

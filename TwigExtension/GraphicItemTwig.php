@@ -74,7 +74,7 @@ class GraphicItemTwig extends AbstractExtension
    */
   public function render(?string $keyname): string
   {
-    if($keyname && ($icon = $this->graphicItemManagement->getPicto($keyname)))
+    if($keyname && ($icon = $this->graphicItemManagement->init()->getPicto($keyname)))
     {
       if(str_contains($keyname, "custom-picto"))
       {

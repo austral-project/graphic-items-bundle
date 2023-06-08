@@ -69,7 +69,7 @@ class CustomPicto
    */
   public function init($force = false): CustomPicto
   {
-    if(!$this->icons || $force)
+    if(count($this->icons) <= 0  || $force)
     {
       $pictoObjects = $this->itemCategorieEntityManager->selectAll("root.position", "ASC");
       /** @var ItemCategoryInterface $category */

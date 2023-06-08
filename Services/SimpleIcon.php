@@ -60,7 +60,7 @@ class SimpleIcon
    */
   public function init($force = false): SimpleIcon
   {
-    if(!$this->icons || $force)
+    if(count($this->icons) <= 0  || $force)
     {
       $iconsNoFiles = array();
       if(file_exists($this->simpleIconsDataPath))

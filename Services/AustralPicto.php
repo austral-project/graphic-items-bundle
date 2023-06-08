@@ -59,7 +59,7 @@ class AustralPicto
    */
   public function init($force = false): AustralPicto
   {
-    if(!$this->icons || $force)
+    if(count($this->icons) <= 0 || $force)
     {
       if(file_exists($this->australFontPictosDataPath))
       {
