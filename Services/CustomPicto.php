@@ -48,6 +48,11 @@ class CustomPicto
   protected array $iconsByCateg = array();
 
   /**
+   * @var bool
+   */
+  protected bool $isInitialise = false;
+
+  /**
    * SimplePicto constructor
    *
    * @param ItemCategoryEntityManager $itemCategorieEntityManager
@@ -69,7 +74,7 @@ class CustomPicto
    */
   public function init($force = false): CustomPicto
   {
-    if(count($this->icons) <= 0  || $force)
+    if(!$this->isInitialise || $force)
     {
       $pictoObjects = $this->itemCategorieEntityManager->selectAll("root.position", "ASC");
       /** @var ItemCategoryInterface $category */
@@ -100,6 +105,7 @@ class CustomPicto
           }
         }
       }
+      $this->isInitialise = true;
     }
     return $this;
   }

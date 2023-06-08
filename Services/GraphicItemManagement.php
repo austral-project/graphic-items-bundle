@@ -126,9 +126,12 @@ class GraphicItemManagement
    * spriteSVG
    * @return SpriteSVG
    * @throws \DOMException
+   * @throws \Exception
    */
   public function spriteSVG(): SpriteSVG
   {
+    $this->simpleIcon->init();
+    $this->australPicto->init();
     $sprite = new SpriteSVG();
     $i = 0;
     foreach ($this->getPictos() as $type => $iconsByType)

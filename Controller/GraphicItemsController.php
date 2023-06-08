@@ -61,7 +61,7 @@ class GraphicItemsController  implements ContainerAwareInterface
     header("Access-Control-Allow-Origin: *");
     header("Austral: Generate");
     header('Access-Control-Expose-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description, Content-Length, Cache-Control');
-    $graphicItemsManagement = $this->container->get('austral.graphic_items.management')->init();
+    $graphicItemsManagement = $this->container->get('austral.graphic_items.management');
     $spriteSVG = $graphicItemsManagement->spriteSVG();
 
     $response = new Response($spriteSVG->output());

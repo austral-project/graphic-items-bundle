@@ -38,6 +38,11 @@ class AustralPicto
   protected array $icons = array();
 
   /**
+   * @var bool
+   */
+  protected bool $isInitialise = false;
+
+  /**
    * SimplePicto constructor
    *
    * @param ContainerInterface $container
@@ -59,7 +64,7 @@ class AustralPicto
    */
   public function init($force = false): AustralPicto
   {
-    if(count($this->icons) <= 0 || $force)
+    if(!$this->isInitialise || $force)
     {
       if(file_exists($this->australFontPictosDataPath))
       {
@@ -87,6 +92,7 @@ class AustralPicto
           }
         }
       }
+      $this->isInitialise = true;
     }
     return $this;
   }

@@ -39,6 +39,11 @@ class SimpleIcon
   protected array $icons = array();
 
   /**
+   * @var bool
+   */
+  protected bool $isInitialise = false;
+
+  /**
    * SimpleIcon constructor
    *
    * @param ContainerInterface $container
@@ -60,7 +65,7 @@ class SimpleIcon
    */
   public function init($force = false): SimpleIcon
   {
-    if(count($this->icons) <= 0  || $force)
+    if(!$this->isInitialise || $force)
     {
       $iconsNoFiles = array();
       if(file_exists($this->simpleIconsDataPath))
@@ -80,7 +85,7 @@ class SimpleIcon
             $fileContent = file_get_contents($filePath);
             preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
             $keyname = "simple-icon-{$keyname}";
-            $this->pictos[$keyname] = Picto::create($keyname)
+            $this->icons[$keyname] = Picto::create($keyname)
               ->setTitle($icon->title)
               ->setHexa($icon->hex)
               ->setPath($filePath)
@@ -94,6 +99,7 @@ class SimpleIcon
           }
         }
       }
+      $this->isInitialise = true;
     }
     return $this;
   }
@@ -127,7 +133,7 @@ class SimpleIcon
    */
   public function getPictos(): array
   {
-    return $this->pictos;
+    return $this->icons;
   }
 
   /**

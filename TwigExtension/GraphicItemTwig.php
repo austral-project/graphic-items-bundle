@@ -69,8 +69,11 @@ class GraphicItemTwig extends AbstractExtension
 
   /**
    * render
+   *
    * @param string|null $keyname
+   *
    * @return string
+   * @throws \Exception
    */
   public function render(?string $keyname): string
   {
