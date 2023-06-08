@@ -18,7 +18,7 @@ services:
 
   austral.graphic_items.custom_picto:
     class:          Austral\GraphicItemsBundle\Services\CustomPicto
-    arguments:      ["@service_container"]
+    arguments:      ["@austral.entity_manager.graphic_items.item_category", "@austral.entity.mapping"]
 
 
 ##### Twig Extension detected

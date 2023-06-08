@@ -10,15 +10,27 @@
 
 namespace Austral\GraphicItemsBundle\Services;
 
+use Austral\EntityBundle\Mapping\Mapping;
 use Austral\EntityFileBundle\File\Mapping\FieldFileMapping;
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemCategoryInterface;
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface;
+use Austral\GraphicItemsBundle\EntityManager\ItemCategoryEntityManager;
 use Austral\GraphicItemsBundle\Model\Picto;
 use Austral\ToolsBundle\AustralTools;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CustomPicto
 {
+
+  /**
+   * @var ItemCategoryEntityManager
+   */
+  protected ItemCategoryEntityManager $itemCategorieEntityManager;
+
+  /**
+   * @var Mapping
+   */
+  protected Mapping $mapping;
 
   /**
    * @var string
@@ -38,45 +50,58 @@ class CustomPicto
   /**
    * SimplePicto constructor
    *
-   * @param ContainerInterface $container
+   * @param ItemCategoryEntityManager $itemCategorieEntityManager
+   * @param Mapping $mapping
+   */
+  public function __construct(ItemCategoryEntityManager $itemCategorieEntityManager, Mapping $mapping)
+  {
+    $this->itemCategorieEntityManager = $itemCategorieEntityManager;
+    $this->mapping = $mapping;
+  }
+
+  /**
+   * init
    *
+   * @param $force
+   *
+   * @return $this
    * @throws \Exception
    */
-  public function __construct(ContainerInterface $container)
+  public function init($force = false): CustomPicto
   {
-    $pictoObjects = $container->get("austral.entity_manager.graphic_items.item_category")
-      ->selectAll("root.position", "ASC");
-
-    $mapping = $container->get("austral.entity.mapping");
-
-    /** @var ItemCategoryInterface $category */
-    foreach ($pictoObjects as $category)
+    if(!$this->icons || $force)
     {
-      $this->iconsByCateg[$category->getId()] = array(
-        "name"    =>  $category->getName(),
-        "pictos"  =>  array()
-      );
-      /** @var ItemInterface $item */
-      foreach ($category->getItems() as $item)
+      $pictoObjects = $this->itemCategorieEntityManager->selectAll("root.position", "ASC");
+      /** @var ItemCategoryInterface $category */
+      foreach ($pictoObjects as $category)
       {
-        $keyname = $item->getKeyname();
-        if($fieldFileMapping = $mapping->getFieldsMappingByFieldname($item->getClassnameForMapping(), FieldFileMapping::class, "picto"))
+        $this->iconsByCateg[$category->getId()] = array(
+          "name"    =>  $category->getName(),
+          "pictos"  =>  array()
+        );
+        /** @var ItemInterface $item */
+        foreach ($category->getItems() as $item)
         {
-          $filePath = $fieldFileMapping->getObjectFilePath($item);
-          if($filePath)
+          $keyname = $item->getKeyname();
+          if($fieldFileMapping = $this->mapping->getFieldsMappingByFieldname($item->getClassnameForMapping(), FieldFileMapping::class, "picto"))
           {
-            $keyname = "custom-picto-{$keyname}";
-            $icon = Picto::create($keyname)
-              ->setTitle($item->getName())
-              ->setPath($filePath)
-              ->setIsSVG($this->isSVG($filePath))
-              ->setContent($this->getContentFilePath($filePath));
-            $this->icons[$keyname] = $icon;
-            $this->iconsByCateg[$category->getId()]["pictos"][$keyname] = $icon;
+            $filePath = $fieldFileMapping->getObjectFilePath($item);
+            if($filePath)
+            {
+              $keyname = "custom-picto-{$keyname}";
+              $icon = Picto::create($keyname)
+                ->setTitle($item->getName())
+                ->setPath($filePath)
+                ->setIsSVG($this->isSVG($filePath))
+                ->setContent($this->getContentFilePath($filePath));
+              $this->icons[$keyname] = $icon;
+              $this->iconsByCateg[$category->getId()]["pictos"][$keyname] = $icon;
+            }
           }
         }
       }
     }
+    return $this;
   }
 
   /**

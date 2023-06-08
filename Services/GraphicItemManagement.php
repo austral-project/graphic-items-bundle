@@ -50,6 +50,7 @@ class GraphicItemManagement
    * @param bool $withCateg
    *
    * @return array
+   * @throws \Exception
    */
   public function getPictos(bool $withCateg = false): array
   {
@@ -57,13 +58,13 @@ class GraphicItemManagement
     {
       $pictos = array(
         "austral-picto"   =>  array(
-          "pictos"  =>  $this->australPicto->getPictos()
+          "pictos"  =>  $this->australPicto->init()->getPictos()
         ),
         "simple-icon"     =>  array(
-          "pictos"  =>  $this->simpleIcon->getPictos()
+          "pictos"  =>  $this->simpleIcon->init()->getPictos()
         ),
       );
-      foreach ($this->customPicto->getPictosByCateg() as $categId => $values)
+      foreach ($this->customPicto->init()->getPictosByCateg() as $categId => $values)
       {
         $pictos[$categId] = $values;
       }
@@ -71,9 +72,9 @@ class GraphicItemManagement
     else
     {
       $pictos = array(
-        "austral-picto"   =>  $this->australPicto->getPictos(),
-        "simple-icon"     =>  $this->simpleIcon->getPictos(),
-        "custom-picto"    =>  $this->customPicto->getPictos(false)
+        "austral-picto"   =>  $this->australPicto->init()->getPictos(),
+        "simple-icon"     =>  $this->simpleIcon->init()->getPictos(),
+        "custom-picto"    =>  $this->customPicto->init()->getPictos(false)
       );
     }
     return $pictos;
@@ -85,6 +86,7 @@ class GraphicItemManagement
    * @param string $keyname
    *
    * @return Picto|null
+   * @throws \Exception
    */
   public function getPicto(string $keyname): ?Picto
   {
@@ -92,17 +94,17 @@ class GraphicItemManagement
     if(str_contains($keyname, "austral-picto"))
     {
       /** @var Picto $picto */
-      $icon = $this->australPicto->getPicto($keyname);
+      $icon = $this->australPicto->init()->getPicto($keyname);
     }
     elseif(str_contains($keyname, "simple-icon"))
     {
       /** @var Picto $picto */
-      $icon = $this->simpleIcon->getPicto($keyname);
+      $icon = $this->simpleIcon->init()->getPicto($keyname);
     }
     elseif(str_contains($keyname, "custom-picto"))
     {
       /** @var Picto $picto */
-      $icon = $this->customPicto->getPicto($keyname);
+      $icon = $this->customPicto->init()->getPicto($keyname);
     }
     return $icon;
   }

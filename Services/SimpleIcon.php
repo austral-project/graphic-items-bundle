@@ -21,12 +21,22 @@ class SimpleIcon
   /**
    * @var string
    */
+  protected string $simpleIconsPath;
+
+  /**
+   * @var string
+   */
+  protected string $simpleIconsDataPath;
+
+  /**
+   * @var string
+   */
   protected string $iconsPath;
 
   /**
    * @var array
    */
-  protected array $pictos = array();
+  protected array $icons = array();
 
   /**
    * SimpleIcon constructor
@@ -35,41 +45,57 @@ class SimpleIcon
    */
   public function __construct(ContainerInterface $container)
   {
-    $simpleIconsPath = "{$container->getParameter("kernel.project_dir")}/vendor/simple-icons/simple-icons";
-    $simpleIconsDataPath = "{$simpleIconsPath}/_data/simple-icons.json";
-    $this->iconsPath = "{$simpleIconsPath}/icons";
-    $iconsNoFiles = array();
-    if(file_exists($simpleIconsDataPath))
+    $this->simpleIconsPath = "{$container->getParameter("kernel.project_dir")}/vendor/simple-icons/simple-icons";
+    $this->simpleIconsDataPath = "{$this->simpleIconsPath}/_data/simple-icons.json";
+    $this->iconsPath = "{$this->simpleIconsPath}/icons";
+  }
+
+  /**
+   * init
+   *
+   * @param $force
+   *
+   * @return $this
+   * @throws \Exception
+   */
+  public function init($force = false): SimpleIcon
+  {
+    if(!$this->icons || $force)
     {
-      $simpleIcons = json_decode(file_get_contents($simpleIconsDataPath));
-      foreach ($simpleIcons->icons as $icon)
+      $iconsNoFiles = array();
+      if(file_exists($this->simpleIconsDataPath))
       {
-        $keyname = $this->generateKeyname($icon->title);
-        $filePath = "{$this->iconsPath}/{$keyname}.svg";
-        if(!file_exists($filePath))
+        $simpleIcons = json_decode(file_get_contents($this->simpleIconsDataPath));
+        foreach ($simpleIcons->icons as $icon)
         {
-          $keyname = $this->generateKeyname($icon->title, true);
+          $keyname = $this->generateKeyname($icon->title);
           $filePath = "{$this->iconsPath}/{$keyname}.svg";
-        }
-        if(file_exists($filePath))
-        {
-          $fileContent = file_get_contents($filePath);
-          preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
-          $keyname = "simple-icon-{$keyname}";
-          $this->pictos[$keyname] = Picto::create($keyname)
-            ->setTitle($icon->title)
-            ->setHexa($icon->hex)
-            ->setPath($filePath)
-            ->setIsSVG(true)
-            ->setViewBox(AustralTools::getValueByKey($matches, 1, null))
-            ->setContent($fileContent);
-        }
-        else
-        {
-          $iconsNoFiles[$keyname] = $icon;
+          if(!file_exists($filePath))
+          {
+            $keyname = $this->generateKeyname($icon->title, true);
+            $filePath = "{$this->iconsPath}/{$keyname}.svg";
+          }
+          if(file_exists($filePath))
+          {
+            $fileContent = file_get_contents($filePath);
+            preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
+            $keyname = "simple-icon-{$keyname}";
+            $this->pictos[$keyname] = Picto::create($keyname)
+              ->setTitle($icon->title)
+              ->setHexa($icon->hex)
+              ->setPath($filePath)
+              ->setIsSVG(true)
+              ->setViewBox(AustralTools::getValueByKey($matches, 1, null))
+              ->setContent($fileContent);
+          }
+          else
+          {
+            $iconsNoFiles[$keyname] = $icon;
+          }
         }
       }
     }
+    return $this;
   }
 
   /**
