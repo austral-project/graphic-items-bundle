@@ -85,7 +85,7 @@ class GraphicItemTwig extends AbstractExtension
       }
       else
       {
-        return "<svg viewBox=\"{$icon->getViewBox()}\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"{$this->urlGenerator->generate("austral_graphic_items_icons")}#{$keyname}\"></use></svg>";
+        return "<svg aria-hidden='true' viewBox=\"{$icon->getViewBox()}\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"{$this->urlGenerator->generate("austral_graphic_items_icons")}#{$keyname}\"></use></svg>";
       }
     }
     return "";
