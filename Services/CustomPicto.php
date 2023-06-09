@@ -11,21 +11,27 @@
 namespace Austral\GraphicItemsBundle\Services;
 
 use Austral\EntityBundle\Mapping\Mapping;
+use Austral\EntityBundle\ORM\AustralQueryBuilder;
 use Austral\EntityFileBundle\File\Mapping\FieldFileMapping;
-use Austral\GraphicItemsBundle\Entity\Interfaces\ItemCategoryInterface;
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface;
-use Austral\GraphicItemsBundle\EntityManager\ItemCategoryEntityManager;
+use Austral\GraphicItemsBundle\EntityManager\ItemEntityManager;
 use Austral\GraphicItemsBundle\Model\Picto;
 use Austral\ToolsBundle\AustralTools;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Class CustomPicto
+ * @package Austral\GraphicItemsBundle\Services
+ *
+ * @author Matthieu Beurel <matthieu@yipikai.studio>
+ * @final
+ */
 class CustomPicto
 {
 
   /**
-   * @var ItemCategoryEntityManager
+   * @var ItemEntityManager
    */
-  protected ItemCategoryEntityManager $itemCategorieEntityManager;
+  protected ItemEntityManager $itemEntityManager;
 
   /**
    * @var Mapping
@@ -55,12 +61,12 @@ class CustomPicto
   /**
    * SimplePicto constructor
    *
-   * @param ItemCategoryEntityManager $itemCategorieEntityManager
+   * @param ItemEntityManager $itemEntityManager
    * @param Mapping $mapping
    */
-  public function __construct(ItemCategoryEntityManager $itemCategorieEntityManager, Mapping $mapping)
+  public function __construct(ItemEntityManager $itemEntityManager, Mapping $mapping)
   {
-    $this->itemCategorieEntityManager = $itemCategorieEntityManager;
+    $this->itemEntityManager = $itemEntityManager;
     $this->mapping = $mapping;
   }
 
@@ -76,32 +82,41 @@ class CustomPicto
   {
     if(!$this->isInitialise || $force)
     {
-      $pictoObjects = $this->itemCategorieEntityManager->selectAll("root.position", "ASC");
-      /** @var ItemCategoryInterface $category */
-      foreach ($pictoObjects as $category)
+      $pictoObjects = $this->itemEntityManager->selectAll("category.position", "ASC", function(AustralQueryBuilder $australQueryBuilder){
+        $australQueryBuilder->leftJoin("root.category", "category")->addSelect("category")
+        ->addOrderBy("root.name", "ASC");
+
+      });
+      /** @var ItemInterface $item */
+      foreach ($pictoObjects as $item)
       {
-        $this->iconsByCateg[$category->getId()] = array(
-          "name"    =>  $category->getName(),
-          "pictos"  =>  array()
-        );
-        /** @var ItemInterface $item */
-        foreach ($category->getItems() as $item)
+        $categoryId = "default";
+        if($item->getCategory())
         {
-          $keyname = $item->getKeyname();
-          if($fieldFileMapping = $this->mapping->getFieldsMappingByFieldname($item->getClassnameForMapping(), FieldFileMapping::class, "picto"))
+          $categoryId = $item->getCategory()->getId();
+        }
+
+        if(!array_key_exists($categoryId, $this->iconsByCateg))
+        {
+          $this->iconsByCateg[$categoryId] = array(
+            "name"    =>  $categoryId === "default" ? "default" : $item->getCategory()->getName(),
+            "pictos"  =>  array()
+          );
+        }
+        $keyname = $item->getKeyname();
+        if($fieldFileMapping = $this->mapping->getFieldsMappingByFieldname($item->getClassnameForMapping(), FieldFileMapping::class, "picto"))
+        {
+          $filePath = $fieldFileMapping->getObjectFilePath($item);
+          if($filePath)
           {
-            $filePath = $fieldFileMapping->getObjectFilePath($item);
-            if($filePath)
-            {
-              $keyname = "custom-picto-{$keyname}";
-              $icon = Picto::create($keyname)
-                ->setTitle($item->getName())
-                ->setPath($filePath)
-                ->setIsSVG($this->isSVG($filePath))
-                ->setContent($this->getContentFilePath($filePath));
-              $this->icons[$keyname] = $icon;
-              $this->iconsByCateg[$category->getId()]["pictos"][$keyname] = $icon;
-            }
+            $keyname = "custom-picto-{$keyname}";
+            $icon = Picto::create($keyname)
+              ->setTitle($item->getName())
+              ->setPath($filePath)
+              ->setIsSVG($this->isSVG($filePath))
+              ->setContent($this->getContentFilePath($filePath));
+            $this->icons[$keyname] = $icon;
+            $this->iconsByCateg[$categoryId]["pictos"][$keyname] = $icon;
           }
         }
       }
