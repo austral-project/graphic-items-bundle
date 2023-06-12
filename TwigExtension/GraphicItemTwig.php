@@ -11,6 +11,7 @@
 namespace Austral\GraphicItemsBundle\TwigExtension;
 
 use Austral\GraphicItemsBundle\Services\GraphicItemManagement;
+use Austral\ToolsBundle\AustralTools;
 use Symfony\Component\Routing\Router;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -71,24 +72,48 @@ class GraphicItemTwig extends AbstractExtension
    * render
    *
    * @param string|null $keyname
+   * @param array $attributes
    *
    * @return string
    * @throws \Exception
    */
-  public function render(?string $keyname): string
+  public function render(?string $keyname, array $attributes = array()): string
   {
     if($keyname && ($icon = $this->graphicItemManagement->init()->getPicto($keyname)))
     {
       if(str_contains($keyname, "custom-picto"))
       {
-        return "<img src=\"{$this->urlGenerator->generate("austral_graphic_items_icon", array("keyname"=>$keyname))}\" alt=\"\" >";
+        $attributes = array_merge(array(
+          "alt" =>  ""
+        ), $attributes);
+        return "<img src=\"{$this->urlGenerator->generate("austral_graphic_items_icon", array("keyname"=>$keyname))}\" ".$this->arrayToString($attributes)." >";
       }
       else
       {
-        return "<svg aria-hidden='true' viewBox=\"{$icon->getViewBox()}\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"{$this->urlGenerator->generate("austral_graphic_items_icons")}#{$keyname}\"></use></svg>";
+        $attributes = array_merge(array(
+          "aria-hidden" =>  "true"
+        ), $attributes);
+        return "<svg ".$this->arrayToString($attributes)." viewBox=\"{$icon->getViewBox()}\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"{$this->urlGenerator->generate("austral_graphic_items_icons")}#{$keyname}\"></use></svg>";
       }
     }
     return "";
+  }
+
+  /**
+   * arrayToString
+   *
+   * @param array $array
+   *
+   * @return string
+   */
+  protected function arrayToString(array $array = array()): string
+  {
+    $arrayToString = array();
+    foreach ($array as $key => $value)
+    {
+      $arrayToString[] = "{$key}=\"{$value}\"";
+    }
+    return implode(" ", $arrayToString);
   }
 
 }
