@@ -81,7 +81,7 @@ class GraphicItemTwig extends AbstractExtension
   {
     if($keyname && ($icon = $this->graphicItemManagement->init()->getPicto($keyname)))
     {
-      if(str_contains($keyname, "custom-picto"))
+      if(str_contains($keyname, "custom-picto") && !$icon->getIsSVG())
       {
         $attributes = array_merge(array(
           "alt" =>  ""
@@ -93,7 +93,7 @@ class GraphicItemTwig extends AbstractExtension
         $attributes = array_merge(array(
           "aria-hidden" =>  "true"
         ), $attributes);
-        return "<svg ".$this->arrayToString($attributes)." viewBox=\"{$icon->getViewBox()}\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"{$this->urlGenerator->generate("austral_graphic_items_icons")}#{$keyname}\"></use></svg>";
+        return preg_replace("/\<svg/", "<svg ".$this->arrayToString($attributes), $icon->getContent());
       }
     }
     return "";
