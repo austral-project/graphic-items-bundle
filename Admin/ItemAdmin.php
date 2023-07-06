@@ -12,6 +12,7 @@ namespace Austral\GraphicItemsBundle\Admin;
 
 use App\Entity\Austral\GraphicItemsBundle\ItemCategory;
 use Austral\FormBundle\Mapper\Fieldset;
+use Austral\GraphicItemsBundle\Column\GraphicItem;
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface;
 
 use Austral\AdminBundle\Admin\Admin;
@@ -48,7 +49,9 @@ class ItemAdmin extends Admin implements AdminModuleInterface
   public function configureListMapper(ListAdminEvent $listAdminEvent)
   {
     $listAdminEvent->getListMapper()
+      ->addColumn(new Column\Image("picto"))
       ->addColumn(new Column\Value("name"))
+      ->addColumn(new Column\Value("category"))
       ->addColumn(new Column\Date("updated", "d/m/Y"));
   }
 
