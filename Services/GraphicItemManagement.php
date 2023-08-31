@@ -11,6 +11,7 @@
 namespace Austral\GraphicItemsBundle\Services;
 
 use Austral\GraphicItemsBundle\Model\Picto;
+use Austral\ToolsBundle\Services\Debug;
 
 class GraphicItemManagement
 {
@@ -31,17 +32,24 @@ class GraphicItemManagement
   protected CustomPicto $customPicto;
 
   /**
+   * @var Debug
+   */
+  protected Debug $debug;
+
+  /**
    * GraphicItemManagement constructor
    *
    * @param SimpleIcon $simpleIcon
    * @param AustralPicto $australPicto
    * @param CustomPicto $customPicto
+   * @param Debug $debug
    */
-  public function __construct(SimpleIcon $simpleIcon, AustralPicto $australPicto, CustomPicto $customPicto)
+  public function __construct(SimpleIcon $simpleIcon, AustralPicto $australPicto, CustomPicto $customPicto, Debug $debug)
   {
     $this->simpleIcon = $simpleIcon;
     $this->australPicto = $australPicto;
     $this->customPicto = $customPicto;
+    $this->debug = $debug;
   }
 
   /**
@@ -51,9 +59,11 @@ class GraphicItemManagement
    */
   public function init(): GraphicItemManagement
   {
+    $this->debug->stopWatchStart("austral.graphicItemManagement.init", "austral.graphic_items");
     $this->simpleIcon->init();
     $this->australPicto->init();
     $this->customPicto->init();
+    $this->debug->stopWatchStop("austral.graphicItemManagement.init");
     return $this;
   }
 

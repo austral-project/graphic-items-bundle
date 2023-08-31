@@ -12,10 +12,16 @@ namespace Austral\GraphicItemsBundle\Services;
 
 use Austral\GraphicItemsBundle\Model\Picto;
 use Austral\ToolsBundle\AustralTools;
+use Austral\ToolsBundle\Services\Debug;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AustralPicto
 {
+
+  /**
+   * @var Debug
+   */
+  protected Debug $debug;
 
   /**
    * @var string
@@ -46,12 +52,14 @@ class AustralPicto
    * SimplePicto constructor
    *
    * @param ContainerInterface $container
+   * @param Debug $debug
    */
-  public function __construct(ContainerInterface $container)
+  public function __construct(ContainerInterface $container, Debug $debug)
   {
     $this->australFontsPictosPath = "{$container->getParameter("kernel.project_dir")}/vendor/austral/design-bundle";
     $this->australFontPictosDataPath = "{$this->australFontsPictosPath}/Resources/assets/styles/fonts/austral-picto/selection.json";
     $this->iconsPath = "{$this->australFontsPictosPath}/Resources/public/austral-picto";
+    $this->debug = $debug;
   }
 
   /**
@@ -64,6 +72,7 @@ class AustralPicto
    */
   public function init($force = false): AustralPicto
   {
+    $this->debug->stopWatchStart("austral.australPicto.init", "austral.graphic_items");
     if(!$this->isInitialise || $force)
     {
       if(file_exists($this->australFontPictosDataPath))
@@ -94,6 +103,7 @@ class AustralPicto
       }
       $this->isInitialise = true;
     }
+    $this->debug->stopWatchStop("austral.australPicto.init");
     return $this;
   }
 

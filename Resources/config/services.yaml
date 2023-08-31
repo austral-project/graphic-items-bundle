@@ -6,19 +6,23 @@ services:
 
   austral.graphic_items.management:
     class:          Austral\GraphicItemsBundle\Services\GraphicItemManagement
-    arguments:      ["@austral.graphic_items.simple_icon", "@austral.graphic_items.austral_picto", "@austral.graphic_items.custom_picto"]
+    arguments:
+    - "@austral.graphic_items.simple_icon"
+    - "@austral.graphic_items.austral_picto"
+    - "@austral.graphic_items.custom_picto"
+    - "@austral.tools.debug"
 
   austral.graphic_items.simple_icon:
     class:          Austral\GraphicItemsBundle\Services\SimpleIcon
-    arguments:      ["@service_container"]
+    arguments:      ["@service_container", "@austral.tools.debug"]
 
   austral.graphic_items.austral_picto:
     class:          Austral\GraphicItemsBundle\Services\AustralPicto
-    arguments:      ["@service_container"]
+    arguments:      ["@service_container", "@austral.tools.debug"]
 
   austral.graphic_items.custom_picto:
     class:          Austral\GraphicItemsBundle\Services\CustomPicto
-    arguments:      ["@austral.entity_manager.graphic_items.item", "@austral.entity.mapping"]
+    arguments:      ["@austral.entity_manager.graphic_items.item", "@austral.entity.mapping", "@austral.tools.debug"]
 
 
 ##### Twig Extension detected

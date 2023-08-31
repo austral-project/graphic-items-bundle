@@ -17,6 +17,7 @@ use Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface;
 use Austral\GraphicItemsBundle\EntityManager\ItemEntityManager;
 use Austral\GraphicItemsBundle\Model\Picto;
 use Austral\ToolsBundle\AustralTools;
+use Austral\ToolsBundle\Services\Debug;
 
 /**
  * Class CustomPicto
@@ -37,6 +38,11 @@ class CustomPicto
    * @var Mapping
    */
   protected Mapping $mapping;
+
+  /**
+   * @var Debug
+   */
+  protected Debug $debug;
 
   /**
    * @var string
@@ -63,11 +69,13 @@ class CustomPicto
    *
    * @param ItemEntityManager $itemEntityManager
    * @param Mapping $mapping
+   * @param Debug $debug
    */
-  public function __construct(ItemEntityManager $itemEntityManager, Mapping $mapping)
+  public function __construct(ItemEntityManager $itemEntityManager, Mapping $mapping, Debug $debug)
   {
     $this->itemEntityManager = $itemEntityManager;
     $this->mapping = $mapping;
+    $this->debug = $debug;
   }
 
   /**
@@ -80,6 +88,7 @@ class CustomPicto
    */
   public function init($force = false): CustomPicto
   {
+    $this->debug->stopWatchStart("austral.customPicto.init", "austral.graphic_items");
     if(!$this->isInitialise || $force)
     {
       $pictoObjects = $this->itemEntityManager->selectAll("category.position", "ASC", function(AustralQueryBuilder $australQueryBuilder){
@@ -122,6 +131,7 @@ class CustomPicto
       }
       $this->isInitialise = true;
     }
+    $this->debug->stopWatchStop("austral.customPicto.init");
     return $this;
   }
 

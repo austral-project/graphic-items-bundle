@@ -12,6 +12,7 @@ namespace Austral\GraphicItemsBundle\Services;
 
 use Austral\GraphicItemsBundle\Model\Picto;
 use Austral\ToolsBundle\AustralTools;
+use Austral\ToolsBundle\Services\Debug;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use function Symfony\Component\String\u;
 
@@ -44,15 +45,22 @@ class SimpleIcon
   protected bool $isInitialise = false;
 
   /**
+   * @var Debug
+   */
+  protected Debug $debug;
+
+  /**
    * SimpleIcon constructor
    *
    * @param ContainerInterface $container
+   * @param Debug $debug
    */
-  public function __construct(ContainerInterface $container)
+  public function __construct(ContainerInterface $container, Debug $debug)
   {
     $this->simpleIconsPath = "{$container->getParameter("kernel.project_dir")}/vendor/simple-icons/simple-icons";
     $this->simpleIconsDataPath = "{$this->simpleIconsPath}/_data/simple-icons.json";
     $this->iconsPath = "{$this->simpleIconsPath}/icons";
+    $this->debug = $debug;
   }
 
   /**
@@ -65,6 +73,7 @@ class SimpleIcon
    */
   public function init($force = false): SimpleIcon
   {
+    $this->debug->stopWatchStart("austral.simplePicto.init", "austral.graphic_items");
     if(!$this->isInitialise || $force)
     {
       $iconsNoFiles = array();
@@ -101,6 +110,7 @@ class SimpleIcon
       }
       $this->isInitialise = true;
     }
+    $this->debug->stopWatchStop("austral.simplePicto.init");
     return $this;
   }
 
