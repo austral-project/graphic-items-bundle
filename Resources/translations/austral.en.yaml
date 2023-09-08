@@ -12,6 +12,8 @@ fields:
     entitled:                                   Name
   keyname:
     entitled:                                   Keyname
+  graphicItem:
+    entitled:                                   Picto
 
 graphic-item:
   button:
