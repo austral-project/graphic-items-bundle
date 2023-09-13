@@ -46,7 +46,7 @@ class ItemCategoryRepository extends EntityRepository
    * @return ArrayCollection|array
    * @throws \Doctrine\ORM\Query\QueryException
    */
-  public function selectAll(string $orderByAttribute = 'id', string $orderByType = "ASC", \Closure $closure = null)
+  public function selectAll(string $orderByAttribute = 'id', string $orderByType = "ASC", \Closure $closure = null): array
   {
     $queryBuilder = $this->createQueryBuilder('root');
     if(strpos($orderByAttribute, ".") === false)
