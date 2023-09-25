@@ -4,6 +4,7 @@ services:
     autoconfigure: true
     public:        true
 
+  Austral\GraphicItemsBundle\Services\GraphicItemManagement: "@austral.graphic_items.management"
   austral.graphic_items.management:
     class:          Austral\GraphicItemsBundle\Services\GraphicItemManagement
     arguments:
@@ -12,20 +13,24 @@ services:
     - "@austral.graphic_items.custom_picto"
     - "@austral.tools.debug"
 
+  Austral\GraphicItemsBundle\Services\SimpleIcon: "@austral.graphic_items.simple_icon"
   austral.graphic_items.simple_icon:
     class:          Austral\GraphicItemsBundle\Services\SimpleIcon
     arguments:      ["@service_container", "@austral.tools.debug"]
 
+  Austral\GraphicItemsBundle\Services\AustralPicto: "@austral.graphic_items.austral_picto"
   austral.graphic_items.austral_picto:
     class:          Austral\GraphicItemsBundle\Services\AustralPicto
     arguments:      ["@service_container", "@austral.tools.debug"]
 
+  Austral\GraphicItemsBundle\Services\CustomPicto: "@austral.graphic_items.custom_picto"
   austral.graphic_items.custom_picto:
     class:          Austral\GraphicItemsBundle\Services\CustomPicto
     arguments:      ["@austral.entity_manager.graphic_items.item", "@austral.entity.mapping", "@austral.tools.debug"]
 
 
 ##### Twig Extension detected
+  Austral\GraphicItemsBundle\TwigExtension\GraphicItemTwig: "@twig.extension.graphic_items"
   twig.extension.graphic_items:
     class:        Austral\GraphicItemsBundle\TwigExtension\GraphicItemTwig
     arguments:    ['@austral.graphic_items.management', "@router"]
@@ -35,10 +40,12 @@ services:
 ##### Entities Manager #####
 
   ##### Config Entity Manager
+  Austral\GraphicItemsBundle\EntityManager\ItemEntityManager: "@austral.entity_manager.graphic_items.item"
   austral.entity_manager.graphic_items.item:
     class:          Austral\GraphicItemsBundle\EntityManager\ItemEntityManager
     arguments:      [ "@doctrine.orm.entity_manager",  "@event_dispatcher", "%austral.entity.graphic_items.item.class%" ]
 
+  Austral\GraphicItemsBundle\EntityManager\ItemCategoryEntityManager: "@austral.entity_manager.graphic_items.item_category"
   austral.entity_manager.graphic_items.item_category:
     class:          Austral\GraphicItemsBundle\EntityManager\ItemCategoryEntityManager
     arguments:      [ "@doctrine.orm.entity_manager",  "@event_dispatcher", "%austral.entity.graphic_items.item_category.class%" ]
