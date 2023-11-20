@@ -12,6 +12,7 @@ namespace Austral\GraphicItemsBundle\TwigExtension;
 
 use Austral\GraphicItemsBundle\Services\GraphicItemManagement;
 use Austral\ToolsBundle\AustralTools;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Router;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -73,12 +74,16 @@ class GraphicItemTwig extends AbstractExtension
    *
    * @param string|null $keyname
    * @param array $attributes
-   *
+   * @param array $options
    * @return string
    * @throws \Exception
    */
-  public function render(?string $keyname, array $attributes = array()): string
+  public function render(?string $keyname, array $attributes = array(), array $options = array()): string
   {
+    $resolver = new OptionsResolver();
+    $this->configureRenderOptions($resolver);
+    $options = $resolver->resolve($options);
+
     if($keyname && ($icon = $this->graphicItemManagement->init()->getPicto($keyname)))
     {
       if(str_contains($keyname, "custom-picto") && !$icon->getIsSVG())
@@ -93,10 +98,40 @@ class GraphicItemTwig extends AbstractExtension
         $attributes = array_merge(array(
           "aria-hidden" =>  "true"
         ), $attributes);
-        return preg_replace("/\<svg/", "<svg ".$this->arrayToString($attributes), $icon->getContent());
+        $string = preg_replace("/\<svg/", "<svg ".$this->arrayToString($attributes), $icon->getContent());
+
+        if($options["titleRemove"] === true)
+        {
+          $string = preg_replace("(<title>.*<\/title>)", "", $string);
+        }
+        if($options["idReplace"] === true)
+        {
+          $random = AustralTools::random(4);
+          preg_match_all('/\s(id="([^"]+)")/', $string, $matches, PREG_SET_ORDER);
+          foreach($matches as $match)
+          {
+            $string = str_replace($match[1], "id=\"{$match[2]}-{$random}\"", $string);
+            $string = preg_replace("/#{$match[2]}/", "#{$match[2]}-{$random}", $string);
+          }
+        }
+        return $string;
       }
     }
     return "";
+  }
+
+  /**
+   * @param OptionsResolver $resolver
+   */
+  protected function configureRenderOptions(OptionsResolver $resolver)
+  {
+    $resolver->setDefaults(array(
+        "titleRemove"     => true,
+        "idReplace"       => true
+      )
+    );
+    $resolver->addAllowedTypes("titleRemove", array('bool'))
+      ->addAllowedTypes("idReplace", array('bool'));
   }
 
   /**
