@@ -24,6 +24,8 @@ use Austral\EntityBundle\Entity\EntityInterface;
 use Austral\FormBundle\Field as Field;
 use Austral\ListBundle\Column as Column;
 
+use Austral\ListBundle\DataHydrate\DataHydrateORM;
+use Doctrine\ORM\QueryBuilder;
 use Exception;
 
 /**
@@ -48,7 +50,14 @@ class ItemAdmin extends Admin implements AdminModuleInterface
    */
   public function configureListMapper(ListAdminEvent $listAdminEvent)
   {
-    $listAdminEvent->getListMapper()
+    $listAdminEvent->getListMapper()->buildDataHydrate(function(DataHydrateORM $dataHydrate) {
+        $dataHydrate->addQueryBuilderPaginatorClosure(function(QueryBuilder $queryBuilder) {
+          $queryBuilder->leftJoin("root.category", "category");
+          return $queryBuilder
+            ->orderBy("category.position", "ASC")
+            ->addOrderBy("root.name", "ASC");
+        });
+      })
       ->addColumn(new Column\Image("picto"))
       ->addColumn(new Column\Value("name"))
       ->addColumn(new Column\Value("category"))
