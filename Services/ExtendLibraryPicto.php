@@ -16,18 +16,23 @@ use Austral\ToolsBundle\Services\Debug;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use function Symfony\Component\String\u;
 
-class SimpleIcon
+class ExtendLibraryPicto
 {
 
   /**
    * @var string
    */
-  protected string $simpleIconsPath;
+  protected string $libraryKey;
 
   /**
    * @var string
    */
-  protected string $simpleIconsDataPath;
+  protected string $extendLibraryPath;
+
+  /**
+   * @var string
+   */
+  protected string $extendLibraryDataPath;
 
   /**
    * @var string
@@ -50,16 +55,17 @@ class SimpleIcon
   protected Debug $debug;
 
   /**
-   * SimpleIcon constructor
+   * ExtendLibraryPicto constructor
    *
+   * @param string $libraryKey
+   * @param array $libraryConfig
    * @param ContainerInterface $container
    * @param Debug $debug
    */
-  public function __construct(ContainerInterface $container, Debug $debug)
+  public function __construct(string $libraryKey, array $libraryConfig, ContainerInterface $container, Debug $debug)
   {
-    $this->simpleIconsPath = "{$container->getParameter("kernel.project_dir")}/vendor/simple-icons/simple-icons";
-    $this->simpleIconsDataPath = "{$this->simpleIconsPath}/_data/simple-icons.json";
-    $this->iconsPath = "{$this->simpleIconsPath}/icons";
+    $this->libraryKey = $libraryKey;
+    $this->iconsPath = AustralTools::join($container->getParameter("kernel.project_dir"), $libraryConfig["path"]);
     $this->debug = $debug;
   }
 
@@ -71,49 +77,47 @@ class SimpleIcon
    * @return $this
    * @throws \Exception
    */
-  public function init($force = false): SimpleIcon
+  public function init($force = false): ExtendLibraryPicto
   {
-    $this->debug->stopWatchStart("austral.simplePicto.init", "austral.graphic_items");
+    $this->debug->stopWatchStart("austral.extendLibraryPicto.{$this->libraryKey}.init", "austral.graphic_items");
     if(!$this->isInitialise || $force)
     {
-      $iconsNoFiles = array();
-      if(file_exists($this->simpleIconsDataPath))
+      if(file_exists($this->iconsPath))
       {
-        $simpleIcons = json_decode(file_get_contents($this->simpleIconsDataPath));
-        foreach ($simpleIcons->icons as $icon)
+        foreach (scandir($this->iconsPath) as $filename)
         {
-          $keyname = $this->generateKeyname($icon->title);
-          $filePath = "{$this->iconsPath}/{$keyname}.svg";
-          if(!file_exists($filePath))
+          if(str_ends_with($filename, ".svg"))
           {
-            $keyname = $this->generateKeyname($icon->title, true);
-            $filePath = "{$this->iconsPath}/{$keyname}.svg";
-          }
-          if(file_exists($filePath))
-          {
+            $filePath = AustralTools::join($this->iconsPath, $filename);
             $fileContent = file_get_contents($filePath);
+            $keyname = preg_replace("/\.svg$/", "", $filename);
             preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
-            $keynamePicto = "simple-icon-{$keyname}";
+            $keynamePicto = "{$this->libraryKey}-{$keyname}";
             $this->icons[$keynamePicto] = Picto::create($keynamePicto)
-              ->setCategory("simple-picto")
-              ->setTitle($icon->title)
+              ->setCategory("{$this->libraryKey}-picto")
+              ->setTitle(u($keyname)->replace("-", " ")->title()->toString())
               ->setKeynameReal($keyname)
-              ->setHexa($icon->hex)
               ->setPath($filePath)
               ->setIsSVG(true)
               ->setViewBox(AustralTools::getValueByKey($matches, 1, null))
               ->setContent($fileContent);
           }
-          else
-          {
-            $iconsNoFiles[$keyname] = $icon;
-          }
         }
       }
       $this->isInitialise = true;
     }
-    $this->debug->stopWatchStop("austral.simplePicto.init");
+    $this->debug->stopWatchStop("austral.extendLibraryPicto.{$this->libraryKey}.init");
     return $this;
+  }
+
+  /**
+   * getLibraryKey
+   *
+   * @return string
+   */
+  public function getLibraryKey(): string
+  {
+    return $this->libraryKey;
   }
 
   /**
@@ -159,7 +163,6 @@ class SimpleIcon
   {
     return AustralTools::getValueByKey($this->getPictos(), $keyname, null);
   }
-
 
 
 }

@@ -32,6 +32,7 @@ class AustralGraphicItemsExtension extends Extension
   {
     $configuration = new Configuration();
     $config = $this->processConfiguration($configuration, $configs);
+    $container->setParameter('austral_graphic_items', $config);
 
     $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
     $loader->load('parameters.yaml');

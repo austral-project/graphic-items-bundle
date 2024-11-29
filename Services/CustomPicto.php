@@ -120,7 +120,9 @@ class CustomPicto
           {
             $keyname = "custom-picto-{$keyname}";
             $icon = Picto::create($keyname)
+              ->setCategory("custom-picto-{$categoryId}")
               ->setTitle($item->getName())
+              ->setKeynameReal($keyname)
               ->setPath($filePath)
               ->setIsSVG($this->isSVG($filePath))
               ->setContent($this->getContentFilePath($filePath));

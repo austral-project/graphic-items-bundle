@@ -10,6 +10,7 @@
 
 namespace Austral\GraphicItemsBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -26,7 +27,30 @@ class Configuration implements ConfigurationInterface
   public function getConfigTreeBuilder(): TreeBuilder
   {
     $treeBuilder = new TreeBuilder('austral_graphic_items');
+
+    $rootNode = $treeBuilder->getRootNode();
+    $node = $rootNode->children();
+
+    $this->buildGuidelineSize($node
+      ->arrayNode('extend_libraries_picto')
+      ->arrayPrototype()
+    );
+
     return $treeBuilder;
   }
 
+
+  /**
+   * @param ArrayNodeDefinition $node
+   *
+   * @return mixed
+   */
+  protected function buildGuidelineSize(ArrayNodeDefinition $node)
+  {
+    $node = $node
+      ->children()
+      ->scalarNode('path')->isRequired()->cannotBeEmpty()->end()
+      ->scalarNode('data_path')->end();
+    return $node;
+  }
 }

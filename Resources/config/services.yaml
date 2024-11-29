@@ -10,6 +10,7 @@ services:
     arguments:
     - "@austral.graphic_items.simple_icon"
     - "@austral.graphic_items.austral_picto"
+    - "@austral.graphic_items.extend_libraries_picto"
     - "@austral.graphic_items.custom_picto"
     - "@austral.tools.debug"
 
@@ -22,6 +23,11 @@ services:
   austral.graphic_items.austral_picto:
     class:          Austral\GraphicItemsBundle\Services\AustralPicto
     arguments:      ["@service_container", "@austral.tools.debug"]
+
+  Austral\GraphicItemsBundle\Services\ExtendLibrariesPicto: "@austral.graphic_items.extend_libraries_picto"
+  austral.graphic_items.extend_libraries_picto:
+    class:          Austral\GraphicItemsBundle\Services\ExtendLibrariesPicto
+    arguments:      ["@service_container", "@austral.graphic_items.config", "@austral.tools.debug"]
 
   Austral\GraphicItemsBundle\Services\CustomPicto: "@austral.graphic_items.custom_picto"
   austral.graphic_items.custom_picto:
@@ -36,6 +42,13 @@ services:
     arguments:    ['@austral.graphic_items.management', "@router"]
     tags:
       - { name: twig.extension }
+
+##### Parameters #####
+  Austral\GraphicItemsBundle\Configuration\GraphicItemsConfiguration: "@austral.graphic_items.config"
+  austral.graphic_items.config:
+    class:        Austral\GraphicItemsBundle\Configuration\GraphicItemsConfiguration
+    arguments:    ["%austral_graphic_items%"]
+
 
 ##### Entities Manager #####
 

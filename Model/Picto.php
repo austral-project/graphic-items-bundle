@@ -16,7 +16,17 @@ class Picto
   /**
    * @var string|null
    */
+  protected ?string $category = null;
+
+  /**
+   * @var string|null
+   */
   protected ?string $keyname = null;
+
+  /**
+   * @var string|null
+   */
+  protected ?string $keynameReal = null;
 
   /**
    * @var string|null
@@ -76,6 +86,26 @@ class Picto
   }
 
   /**
+   * getCategory
+   *
+   * @return string|null
+   */
+  public function getCategory(): ?string
+  {
+    return $this->category;
+  }
+
+  /**
+   * @param string|null $category
+   * @return $this
+   */
+  public function setCategory(?string $category): Picto
+  {
+    $this->category = $category;
+    return $this;
+  }
+
+  /**
    * @return string|null
    */
   public function getKeyname(): ?string
@@ -91,6 +121,26 @@ class Picto
   public function setKeyname(?string $keyname): Picto
   {
     $this->keyname = $keyname;
+    return $this;
+  }
+
+  /**
+   * getKeynameReal
+   *
+   * @return string|null
+   */
+  public function getKeynameReal(): ?string
+  {
+    return $this->keynameReal;
+  }
+
+  /**
+   * @param string|null $keynameReal
+   * @return $this
+   */
+  public function setKeynameReal(?string $keynameReal): Picto
+  {
+    $this->keynameReal = $keynameReal;
     return $this;
   }
 
@@ -225,6 +275,20 @@ class Picto
   {
     $this->svgPath = $svgPath;
     return $this;
+  }
+
+  /**
+   * searchValue
+   *
+   * @return string
+   */
+  public function searchValue(): string
+  {
+    $values = array(
+      $this->getKeynameReal(),
+      $this->getTitle()
+    );
+    return implode(" ", $values);
   }
 
 }

@@ -27,6 +27,11 @@ class GraphicItemManagement
   protected AustralPicto $australPicto;
 
   /**
+   * @var ExtendLibrariesPicto
+   */
+  protected ExtendLibrariesPicto $extendLibrariesPicto;
+
+  /**
    * @var CustomPicto
    */
   protected CustomPicto $customPicto;
@@ -41,13 +46,15 @@ class GraphicItemManagement
    *
    * @param SimpleIcon $simpleIcon
    * @param AustralPicto $australPicto
+   * @param ExtendLibrariesPicto $extendLibrariesPicto
    * @param CustomPicto $customPicto
    * @param Debug $debug
    */
-  public function __construct(SimpleIcon $simpleIcon, AustralPicto $australPicto, CustomPicto $customPicto, Debug $debug)
+  public function __construct(SimpleIcon $simpleIcon, AustralPicto $australPicto, ExtendLibrariesPicto $extendLibrariesPicto, CustomPicto $customPicto, Debug $debug)
   {
     $this->simpleIcon = $simpleIcon;
     $this->australPicto = $australPicto;
+    $this->extendLibrariesPicto = $extendLibrariesPicto;
     $this->customPicto = $customPicto;
     $this->debug = $debug;
   }
@@ -62,6 +69,7 @@ class GraphicItemManagement
     $this->debug->stopWatchStart("austral.graphicItemManagement.init", "austral.graphic_items");
     $this->simpleIcon->init();
     $this->australPicto->init();
+    $this->extendLibrariesPicto->init();
     $this->customPicto->init();
     $this->debug->stopWatchStop("austral.graphicItemManagement.init");
     return $this;
@@ -87,6 +95,13 @@ class GraphicItemManagement
           "pictos"  =>  $this->simpleIcon->getPictos()
         ),
       );
+      /** @var ExtendLibraryPicto $extendLibraryPicto */
+      foreach ($this->extendLibrariesPicto->getLibrariesPicto() as $extendLibraryPicto)
+      {
+        $pictos[$extendLibraryPicto->getLibraryKey()] = array(
+          "pictos"  =>  $extendLibraryPicto->getPictos()
+        );
+      }
       foreach ($this->customPicto->getPictosByCateg() as $categId => $values)
       {
         $pictos[$categId] = $values;
@@ -97,8 +112,13 @@ class GraphicItemManagement
       $pictos = array(
         "austral-picto"   =>  $this->australPicto->getPictos(),
         "simple-icon"     =>  $this->simpleIcon->getPictos(),
-        "custom-picto"    =>  $this->customPicto->getPictos()
       );
+      /** @var ExtendLibraryPicto $extendLibraryPicto */
+      foreach ($this->extendLibrariesPicto->getLibrariesPicto() as $extendLibraryPicto)
+      {
+        $pictos[$extendLibraryPicto->getLibraryKey()] = $extendLibraryPicto->getPictos();
+      }
+      $pictos["custom-picto"] = $this->customPicto->getPictos();
     }
     return $pictos;
   }
@@ -129,6 +149,18 @@ class GraphicItemManagement
       /** @var Picto $picto */
       $icon = $this->customPicto->getPicto($keyname);
     }
+    else
+    {
+      /** @var ExtendLibraryPicto $extendLibraryPicto */
+      foreach ($this->extendLibrariesPicto->getLibrariesPicto() as $extendLibraryPicto)
+      {
+        if(str_contains($keyname, $extendLibraryPicto->getLibraryKey()))
+        {
+          /** @var Picto $picto */
+          $icon = $extendLibraryPicto->getPicto($keyname);
+        }
+      }
+    }
     return $icon;
   }
 
@@ -142,6 +174,7 @@ class GraphicItemManagement
   {
     $this->simpleIcon->init();
     $this->australPicto->init();
+    $this->extendLibrariesPicto->init();
     $sprite = new SpriteSVG();
     $i = 0;
     foreach ($this->getPictos() as $type => $iconsByType)

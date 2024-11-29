@@ -96,7 +96,9 @@ class GraphicItemTwig extends AbstractExtension
       else
       {
         $attributes = array_merge(array(
-          "aria-hidden" =>  "true"
+          "aria-hidden" =>  "true",
+          "class"       =>  "picto-item-svg category-".$icon->getCategory(),
+          "style"       =>  $icon->getHexa() ? "--color-default-picto:#{$icon->getHexa()}" : ""
         ), $attributes);
         $string = preg_replace("/\<svg/", "<svg ".$this->arrayToString($attributes), $icon->getContent());
 

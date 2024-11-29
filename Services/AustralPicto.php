@@ -14,6 +14,7 @@ use Austral\GraphicItemsBundle\Model\Picto;
 use Austral\ToolsBundle\AustralTools;
 use Austral\ToolsBundle\Services\Debug;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use function Symfony\Component\String\u;
 
 class AustralPicto
 {
@@ -84,11 +85,13 @@ class AustralPicto
           $filePath = "{$this->iconsPath}/{$keyname}.svg";
           if(file_exists($filePath))
           {
-            $keyname = "austral-picto-{$keyname}";
+            $keynamePicto = "austral-picto-{$keyname}";
             $fileContent = file_get_contents($filePath);
             preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
-            $this->icons[$keyname] = Picto::create($keyname)
-              ->setTitle($icon->properties->name)
+            $this->icons[$keynamePicto] = Picto::create($keynamePicto)
+              ->setCategory("austral-picto")
+              ->setTitle(u($icon->properties->name)->replace("-", " ")->title()->toString())
+              ->setKeynameReal($keyname)
               ->setPath($filePath)
               ->setSvgPath($icon->icon->paths)
               ->setIsSVG(true)
@@ -127,6 +130,5 @@ class AustralPicto
   {
     return AustralTools::getValueByKey($this->getPictos(), $keyname, null);
   }
-
 
 }
