@@ -37,6 +37,11 @@ class AustralPicto
   /**
    * @var string
    */
+  protected string $australPictoCachePath;
+
+  /**
+   * @var string
+   */
   protected string $iconsPath;
 
   /**
@@ -60,6 +65,7 @@ class AustralPicto
     $this->australFontsPictosPath = "{$container->getParameter("kernel.project_dir")}/vendor/austral/design-bundle";
     $this->australFontPictosDataPath = "{$this->australFontsPictosPath}/Resources/assets/styles/fonts/austral-picto/selection.json";
     $this->iconsPath = "{$this->australFontsPictosPath}/Resources/public/austral-picto";
+    $this->australPictoCachePath = "{$container->getParameter("kernel.project_dir")}/var/cache/austral-picto";
     $this->debug = $debug;
   }
 
@@ -76,32 +82,34 @@ class AustralPicto
     $this->debug->stopWatchStart("austral.australPicto.init", "austral.graphic_items");
     if(!$this->isInitialise || $force)
     {
-      if(file_exists($this->australFontPictosDataPath))
+      if(file_exists($this->australPictoCachePath))
       {
-        $fontPictos = json_decode(file_get_contents($this->australFontPictosDataPath));
-        foreach ($fontPictos->icons as $icon)
-        {
-          $keyname = $icon->properties->name;
-          $filePath = "{$this->iconsPath}/{$keyname}.svg";
-          if(file_exists($filePath))
-          {
-            $keynamePicto = "austral-picto-{$keyname}";
-            $fileContent = file_get_contents($filePath);
-            preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
-            $this->icons[$keynamePicto] = Picto::create($keynamePicto)
-              ->setCategory("austral-picto")
-              ->setTitle(u($icon->properties->name)->replace("-", " ")->title()->toString())
-              ->setKeynameReal($keyname)
-              ->setPath($filePath)
-              ->setSvgPath($icon->icon->paths)
-              ->setIsSVG(true)
-              ->setViewBox(AustralTools::getValueByKey($matches, 1, null))
-              ->setContent($fileContent);
+        $this->icons = unserialize(file_get_contents($this->australPictoCachePath));
+      }
+      else {
+        if (file_exists($this->australFontPictosDataPath)) {
+          $fontPictos = json_decode(file_get_contents($this->australFontPictosDataPath));
+          foreach ($fontPictos->icons as $icon) {
+            $keyname = $icon->properties->name;
+            $filePath = "{$this->iconsPath}/{$keyname}.svg";
+            if (file_exists($filePath)) {
+              $keynamePicto = "austral-picto-{$keyname}";
+              $fileContent = file_get_contents($filePath);
+              preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
+              $this->icons[$keynamePicto] = Picto::create($keynamePicto)
+                ->setCategory("austral-picto")
+                ->setTitle(u($icon->properties->name)->replace("-", " ")->title()->toString())
+                ->setKeynameReal($keyname)
+                ->setPath($filePath)
+                ->setSvgPath($icon->icon->paths)
+                ->setIsSVG(true)
+                ->setViewBox(AustralTools::getValueByKey($matches, 1, null))
+                ->setContent($fileContent);
+            } else {
+              $iconsNoFiles[$keyname] = $icon;
+            }
           }
-          else
-          {
-            $iconsNoFiles[$keyname] = $icon;
-          }
+          file_put_contents($this->australPictoCachePath, serialize($this->icons));
         }
       }
       $this->isInitialise = true;
