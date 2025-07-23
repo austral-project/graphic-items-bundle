@@ -37,6 +37,11 @@ class ExtendLibraryPicto
   /**
    * @var string
    */
+  protected string $extendLibraryCachePath;
+
+  /**
+   * @var string
+   */
   protected string $iconsPath;
 
   /**
@@ -66,6 +71,7 @@ class ExtendLibraryPicto
   {
     $this->libraryKey = $libraryKey;
     $this->iconsPath = AustralTools::join($container->getParameter("kernel.project_dir"), $libraryConfig["path"]);
+    $this->extendLibraryCachePath = "{$container->getParameter("kernel.project_dir")}/var/cache/{$this->libraryKey}";
     $this->debug = $debug;
   }
 
@@ -82,26 +88,31 @@ class ExtendLibraryPicto
     $this->debug->stopWatchStart("austral.extendLibraryPicto.{$this->libraryKey}.init", "austral.graphic_items");
     if(!$this->isInitialise || $force)
     {
-      if(file_exists($this->iconsPath))
+
+      if(file_exists($this->extendLibraryCachePath))
       {
-        foreach (scandir($this->iconsPath) as $filename)
-        {
-          if(str_ends_with($filename, ".svg"))
-          {
-            $filePath = AustralTools::join($this->iconsPath, $filename);
-            $fileContent = file_get_contents($filePath);
-            $keyname = preg_replace("/\.svg$/", "", $filename);
-            preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
-            $keynamePicto = "{$this->libraryKey}-{$keyname}";
-            $this->icons[$keynamePicto] = Picto::create($keynamePicto)
-              ->setCategory("{$this->libraryKey}-picto")
-              ->setTitle(u($keyname)->replace("-", " ")->title()->toString())
-              ->setKeynameReal($keyname)
-              ->setPath($filePath)
-              ->setIsSVG(true)
-              ->setViewBox(AustralTools::getValueByKey($matches, 1, null))
-              ->setContent($fileContent);
+        $this->icons = unserialize(file_get_contents($this->extendLibraryCachePath));
+      }
+      else {
+        if (file_exists($this->iconsPath)) {
+          foreach (scandir($this->iconsPath) as $filename) {
+            if (str_ends_with($filename, ".svg")) {
+              $filePath = AustralTools::join($this->iconsPath, $filename);
+              $fileContent = file_get_contents($filePath);
+              $keyname = preg_replace("/\.svg$/", "", $filename);
+              preg_match("/<svg .* viewBox=\"([\d]{0,2} [\d]{0,2} [\d]{0,2} [\d]{0,2})\".*>/", $fileContent, $matches);
+              $keynamePicto = "{$this->libraryKey}-{$keyname}";
+              $this->icons[$keynamePicto] = Picto::create($keynamePicto)
+                ->setCategory("{$this->libraryKey}-picto")
+                ->setTitle(u($keyname)->replace("-", " ")->title()->toString())
+                ->setKeynameReal($keyname)
+                ->setPath($filePath)
+                ->setIsSVG(true)
+                ->setViewBox(AustralTools::getValueByKey($matches, 1, null))
+                ->setContent($fileContent);
+            }
           }
+          file_put_contents($this->extendLibraryCachePath, serialize($this->icons));
         }
       }
       $this->isInitialise = true;
