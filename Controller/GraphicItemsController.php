@@ -36,7 +36,7 @@ class GraphicItemsController  implements ContainerAwareInterface
       $lastModifiedTime = filemtime($icon->getPath());
       $etag = 'W/"' . md5($lastModifiedTime) . '"';
       header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModifiedTime) . " GMT");
-      header('Cache-Control: public, max-age=31536000, must-revalidate'); // On peut ici changer la durée de validité du cache
+      header('Cache-Control: public, max-age=31536000, must-revalidate'); // Cache lifetime can be changed here
       header("Etag: $etag");
 
       if (

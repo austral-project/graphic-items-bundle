@@ -12,7 +12,7 @@ namespace Austral\GraphicItemsBundle\Entity;
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemCategoryInterface;
 
 use Austral\EntityBundle\Entity\Entity;
-use Austral\EntityBundle\Entity\EntityInterface;
+use Austral\Contracts\Entity\EntityInterface;
 use Austral\EntityBundle\Entity\Traits\EntityTimestampableTrait;
 
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface;

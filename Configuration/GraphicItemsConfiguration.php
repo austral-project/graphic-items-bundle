@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Austral ContentBlock Bundle package.
+ * This file is part of the Austral GraphicItems Bundle package.
  *
  * (c) Austral <support@austral.dev>
  *

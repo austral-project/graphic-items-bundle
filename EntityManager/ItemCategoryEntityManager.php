@@ -10,7 +10,7 @@
 
 namespace Austral\GraphicItemsBundle\EntityManager;
 
-use Austral\EntityBundle\Entity\Interfaces\TranslateMasterInterface;
+use Austral\Contracts\Translate\TranslateMasterInterface;
 
 use Austral\EntityBundle\EntityManager\EntityManager;
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemCategoryInterface;

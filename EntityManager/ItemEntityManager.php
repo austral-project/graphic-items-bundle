@@ -11,7 +11,7 @@
 namespace Austral\GraphicItemsBundle\EntityManager;
 
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface;
-use Austral\EntityBundle\Entity\Interfaces\TranslateMasterInterface;
+use Austral\Contracts\Translate\TranslateMasterInterface;
 use Austral\GraphicItemsBundle\Repository\ItemRepository;
 
 use Austral\EntityBundle\EntityManager\EntityManager;

@@ -13,9 +13,9 @@ use Austral\GraphicItemsBundle\Entity\Interfaces\ItemCategoryInterface;
 use Austral\GraphicItemsBundle\Entity\Interfaces\ItemInterface;
 
 use Austral\EntityBundle\Entity\Entity;
-use Austral\EntityBundle\Entity\EntityInterface;
+use Austral\Contracts\Entity\EntityInterface;
 use Austral\EntityBundle\Entity\Traits\EntityTimestampableTrait;
-use Austral\EntityBundle\Entity\Interfaces\FileInterface;
+use Austral\Contracts\File\FileInterface;
 use Austral\EntityFileBundle\Entity\Traits\EntityFileTrait;
 use Austral\EntityFileBundle\Annotation as AustralFile;
 
