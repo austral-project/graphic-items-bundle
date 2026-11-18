@@ -25,7 +25,7 @@
         "austral/entity-file-bundle": "^4.0",
         "austral/http-bundle": "^4.0",
         "austral/design-bundle": "^4.0",
-        "simple-icons/simple-icons": "15.16.0",
+        "simple-icons/simple-icons": "^15.16",
         "symfony/config": "^7.4"
     },
     "config": {
